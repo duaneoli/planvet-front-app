@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
@@ -11,6 +12,17 @@ import Profile from './pages/Profile';
 import PetSocial from './pages/PetSocial';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // Cache de 5 minutos
+      gcTime: 1000 * 60 * 30, // Mantém no lixo por 30 minutos
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const AuthenticatedLayout: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -51,19 +63,21 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <HashRouter>
-      <Routes>
-        {!isAuthenticated ? (
-          <>
-            <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </>
-        ) : (
-          <Route path="*" element={<AuthenticatedLayout onLogout={() => setIsAuthenticated(false)} />} />
-        )}
-      </Routes>
-    </HashRouter>
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <Routes>
+          {!isAuthenticated ? (
+            <>
+              <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </>
+          ) : (
+            <Route path="*" element={<AuthenticatedLayout onLogout={() => setIsAuthenticated(false)} />} />
+          )}
+        </Routes>
+      </HashRouter>
+    </QueryClientProvider>
   );
 };
 

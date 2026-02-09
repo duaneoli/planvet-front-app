@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { MOCK_CONTRACTS, MOCK_PETS } from '../constants';
-// Fixed: Corrected import from 'lucide-center' to 'lucide-react'
-import { FileText, CheckCircle2, AlertCircle, Download, ExternalLink, CreditCard, QrCode } from 'lucide-react';
+import { useContracts } from '../hooks/useContracts';
+import { usePets } from '../hooks/usePets';
+import { FileText, CheckCircle2, AlertCircle, Download, ExternalLink, CreditCard, QrCode, Loader2 } from 'lucide-react';
 import Badge from '../components/Badge';
 import Pagination from '../components/Pagination';
 
@@ -10,11 +10,22 @@ const ITEMS_PER_PAGE = 1;
 
 const Contracts: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(MOCK_CONTRACTS.length / ITEMS_PER_PAGE);
-  const paginatedContracts = MOCK_CONTRACTS.slice(
+  const { data: contracts = [], isLoading: loadingContracts } = useContracts();
+  const { data: pets = [], isLoading: loadingPets } = usePets();
+
+  const totalPages = Math.ceil(contracts.length / ITEMS_PER_PAGE);
+  const paginatedContracts = contracts.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  if (loadingContracts || loadingPets) {
+    return (
+      <div className="h-96 flex items-center justify-center">
+        <Loader2 className="animate-spin text-emerald-600" size={40} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -25,7 +36,7 @@ const Contracts: React.FC = () => {
 
       <div className="space-y-6">
         {paginatedContracts.map(contract => {
-          const pet = MOCK_PETS.find(p => p.id === contract.petId);
+          const pet = pets.find(p => p.id === contract.petId);
           return (
             <div key={contract.id} className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
               <div className="flex flex-col md:flex-row">
@@ -89,18 +100,6 @@ const Contracts: React.FC = () => {
                       <p className="text-[10px] text-slate-400 font-bold uppercase mb-1 tracking-widest">Apólice Nº</p>
                       <p className="font-bold text-slate-700">#{contract.id.split('-')[1] || '1234'}</p>
                     </div>
-                  </div>
-
-                  <div className="mt-10 p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                    <h4 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
-                      <AlertCircle size={18} className="text-emerald-500" />
-                      Informações de Cobrança
-                    </h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      {contract.paymentMethod === 'Cartão' 
-                        ? `Este contrato está configurado para renovação automática via cartão de crédito. A cobrança de R$ ${contract.monthlyValue.toFixed(2)} ocorre todo dia 10.`
-                        : `O pagamento deste plano é realizado via ${contract.paymentMethod}. Você receberá o código para pagamento 5 dias antes do vencimento via e-mail e SMS.`}
-                    </p>
                   </div>
                 </div>
               </div>

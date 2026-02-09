@@ -1,7 +1,9 @@
 
 import React, { useState, useMemo } from 'react';
-import { MOCK_INVOICES, MOCK_USER, MOCK_PETS } from '../constants';
-import { CreditCard, Download, Clock, Settings, Eye, Filter, Plus } from 'lucide-react';
+import { useInvoices } from '../hooks/useBilling';
+import { usePets } from '../hooks/usePets';
+import { MOCK_USER } from '../constants';
+import { CreditCard, Download, Clock, Settings, Eye, Filter, Plus, Loader2 } from 'lucide-react';
 import Badge from '../components/Badge';
 import Button from '../components/Button';
 import PaymentModal from '../components/PaymentModal';
@@ -19,11 +21,14 @@ const Billing: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isCreditCardModalOpen, setIsCreditCardModalOpen] = useState(false);
 
+  const { data: invoices = [], isLoading: loadingInvoices } = useInvoices();
+  const { data: pets = [], isLoading: loadingPets } = usePets();
+
   const filteredInvoices = useMemo(() => {
     return activePetId === 'all' 
-      ? MOCK_INVOICES 
-      : MOCK_INVOICES.filter(inv => inv.petId === activePetId);
-  }, [activePetId]);
+      ? invoices 
+      : invoices.filter(inv => inv.petId === activePetId);
+  }, [activePetId, invoices]);
 
   // Reset page when changing filter
   React.useEffect(() => {
@@ -45,6 +50,14 @@ const Billing: React.FC = () => {
     setUser(updatedUser);
   };
 
+  if (loadingInvoices || loadingPets) {
+    return (
+      <div className="h-96 flex items-center justify-center">
+        <Loader2 className="animate-spin text-emerald-600" size={40} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col lg:flex-row gap-8">
@@ -59,7 +72,7 @@ const Billing: React.FC = () => {
                 <div>
                   <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-tight">Vencimento Próximo</p>
                   <p className="text-xs text-emerald-700 mt-1 font-medium">
-                    {MOCK_PETS[0].name} em <strong>10/01</strong>
+                    Consulte as faturas pendentes abaixo.
                   </p>
                 </div>
               </div>
@@ -82,49 +95,26 @@ const Billing: React.FC = () => {
                 </button>
               </div>
             </div>
-
-            <div className="pt-2">
-              <p className="text-[10px] text-slate-400 font-medium leading-relaxed">
-                Suas faturas são processadas individualmente por pet para garantir transparência total no uso do plano.
-              </p>
-            </div>
           </div>
-
-          <Button 
-            variant="outline" 
-            className="w-full bg-white" 
-            icon={<Plus size={18} />}
-          >
-            Adicionar Novo Método
-          </Button>
         </div>
 
         {/* Right Column: Invoice List with Pet Filtering */}
         <div className="flex-1 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold text-slate-800">Histórico de Faturas</h2>
-              <button 
-                onClick={() => setIsCreditCardModalOpen(true)}
-                className="lg:hidden p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors"
-                title="Configurar Cartão"
-              >
-                <CreditCard size={20} />
-              </button>
-            </div>
+            <h2 className="text-xl font-bold text-slate-800">Histórico de Faturas</h2>
             
-            <div className="flex bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
+            <div className="flex bg-slate-100 p-1 rounded-xl self-start sm:self-auto overflow-x-auto">
               <button 
                 onClick={() => setActivePetId('all')}
-                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${activePetId === 'all' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap ${activePetId === 'all' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
               >
                 Todos
               </button>
-              {MOCK_PETS.map(pet => (
+              {pets.map(pet => (
                 <button 
                   key={pet.id}
                   onClick={() => setActivePetId(pet.id)}
-                  className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${activePetId === pet.id ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 whitespace-nowrap ${activePetId === pet.id ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                   <img src={pet.photo} className="w-4 h-4 rounded-full object-cover" />
                   {pet.name}
@@ -148,7 +138,7 @@ const Billing: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {paginatedInvoices.map(inv => {
-                    const pet = MOCK_PETS.find(p => p.id === inv.petId);
+                    const pet = pets.find(p => p.id === inv.petId);
                     return (
                       <tr key={inv.id} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-4">
@@ -202,15 +192,6 @@ const Billing: React.FC = () => {
                 </tbody>
               </table>
             </div>
-            
-            {filteredInvoices.length === 0 && (
-              <div className="p-12 text-center">
-                <div className="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
-                  <Filter size={24} />
-                </div>
-                <p className="text-slate-500 font-medium">Nenhuma fatura encontrada para este filtro.</p>
-              </div>
-            )}
           </div>
 
           <Pagination 
@@ -237,5 +218,4 @@ const Billing: React.FC = () => {
   );
 };
 
-// Fixed: Added default export to resolve "Module has no default export" error in App.tsx
 export default Billing;

@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
-import { MOCK_PETS } from '../constants';
-import { Plus, Search, Camera } from 'lucide-react';
+import { usePets, useAddPet, useDeletePet } from '../hooks/usePets';
+import { Plus, Search, Loader2 } from 'lucide-react';
 import { Pet, PetSpecies } from '../types';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -12,7 +12,6 @@ import Pagination from '../components/Pagination';
 const ITEMS_PER_PAGE = 3;
 
 const Pets: React.FC = () => {
-  const [pets, setPets] = useState<Pet[]>(MOCK_PETS);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -20,18 +19,17 @@ const Pets: React.FC = () => {
     species: PetSpecies.DOG,
   });
 
+  // Consumindo hooks isolados
+  const { data: pets = [], isLoading } = usePets();
+  const addMutation = useAddPet();
+  const deleteMutation = useDeletePet();
+
   const filteredPets = useMemo(() => {
-    const filtered = pets.filter(pet => 
+    return pets.filter(pet => 
       pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pet.breed.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    return filtered;
   }, [pets, searchTerm]);
-
-  // Reset page when filtering
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
 
   const totalPages = Math.ceil(filteredPets.length / ITEMS_PER_PAGE);
   const paginatedPets = filteredPets.slice(
@@ -51,14 +49,18 @@ const Pets: React.FC = () => {
       photo: 'https://picsum.photos/seed/' + Math.random() + '/400/400',
       planId: 'plan-custom'
     };
-    setPets([...pets, petToAdd]);
-    setShowAddModal(false);
-    setNewPet({ species: PetSpecies.DOG });
+    
+    addMutation.mutate(petToAdd, {
+      onSuccess: () => {
+        setShowAddModal(false);
+        setNewPet({ species: PetSpecies.DOG });
+      }
+    });
   };
 
   const handleDeletePet = (id: string) => {
     if (confirm('Deseja realmente remover este pet?')) {
-      setPets(pets.filter(p => p.id !== id));
+      deleteMutation.mutate(id);
     }
   };
 
@@ -81,23 +83,32 @@ const Pets: React.FC = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {paginatedPets.map(pet => (
-          <PetCard key={pet.id} pet={pet} onDelete={handleDeletePet} />
-        ))}
-      </div>
-
-      {filteredPets.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-3xl border border-dashed border-slate-200">
-          <p className="text-slate-400">Nenhum pet encontrado.</p>
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
+          <Loader2 className="animate-spin text-emerald-600" size={48} />
+          <p className="font-bold">Buscando seus pets no servidor...</p>
         </div>
-      )}
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedPets.map(pet => (
+              <PetCard key={pet.id} pet={pet} onDelete={handleDeletePet} />
+            ))}
+          </div>
 
-      <Pagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        onPageChange={setCurrentPage} 
-      />
+          {filteredPets.length === 0 && (
+            <div className="text-center py-12 bg-white rounded-3xl border border-dashed border-slate-200">
+              <p className="text-slate-400">Nenhum pet encontrado.</p>
+            </div>
+          )}
+
+          <Pagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={setCurrentPage} 
+          />
+        </>
+      )}
 
       <Modal 
         isOpen={showAddModal} 
@@ -105,17 +116,6 @@ const Pets: React.FC = () => {
         title="Cadastrar Novo Pet"
       >
         <form onSubmit={handleAddPet} className="space-y-4">
-          <div className="flex justify-center mb-6">
-            <div className="relative group cursor-pointer">
-              <div className="w-24 h-24 bg-slate-100 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center text-slate-400 group-hover:bg-slate-200 transition-colors">
-                <Camera size={32} />
-              </div>
-              <div className="absolute bottom-0 right-0 bg-emerald-600 text-white p-2 rounded-full shadow-lg">
-                <Plus size={14} />
-              </div>
-            </div>
-          </div>
-
           <Input 
             required
             label="Nome do Pet"
@@ -162,8 +162,13 @@ const Pets: React.FC = () => {
           </div>
 
           <div className="pt-4">
-            <Button type="submit" className="w-full" size="lg">
-              Cadastrar Pet
+            <Button 
+              type="submit" 
+              className="w-full" 
+              size="lg" 
+              isLoading={addMutation.isPending}
+            >
+              Confirmar Cadastro
             </Button>
           </div>
         </form>
