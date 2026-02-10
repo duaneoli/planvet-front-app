@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { Pet, PetSpecies, Contract, Invoice, UserProfile } from './types';
+import { Contract, Invoice, Pet, PetSpecies, UserProfile } from '@/types';
 
 export const BREEDS_BY_SPECIES: Record<string, string[]> = {
   [PetSpecies.DOG]: ['Beagle', 'Bulldog', 'Golden Retriever', 'Labrador', 'Poodle', 'Pug', 'SRD (Vira-lata)', 'Yorkshire'],
@@ -69,45 +68,45 @@ export const MOCK_CONTRACTS: Contract[] = [
 ];
 
 export const MOCK_INVOICES: Invoice[] = [
-  { 
-    id: 'inv-1', 
-    petId: '1', 
-    month: 'Dezembro 2023', 
-    dueDate: '2023-12-10', 
-    value: 129.90, 
-    status: 'Pago', 
+  {
+    id: 'inv-1',
+    petId: '1',
+    month: 'Dezembro 2023',
+    dueDate: '2023-12-10',
+    value: 129.90,
+    status: 'Pago',
     paymentMethod: 'Cartão',
-    link: '#' 
+    link: '#'
   },
-  { 
-    id: 'inv-2', 
-    petId: '2', 
-    month: 'Dezembro 2023', 
-    dueDate: '2023-12-20', 
-    value: 89.90, 
-    status: 'Pago', 
+  {
+    id: 'inv-2',
+    petId: '2',
+    month: 'Dezembro 2023',
+    dueDate: '2023-12-20',
+    value: 89.90,
+    status: 'Pago',
     paymentMethod: 'PIX',
-    link: '#' 
+    link: '#'
   },
-  { 
-    id: 'inv-3', 
-    petId: '1', 
-    month: 'Janeiro 2024', 
-    dueDate: '2024-01-10', 
-    value: 129.90, 
-    status: 'Pendente', 
+  {
+    id: 'inv-3',
+    petId: '1',
+    month: 'Janeiro 2024',
+    dueDate: '2024-01-10',
+    value: 129.90,
+    status: 'Pendente',
     paymentMethod: 'Cartão',
-    link: '#' 
+    link: '#'
   },
-  { 
-    id: 'inv-4', 
-    petId: '2', 
-    month: 'Janeiro 2024', 
-    dueDate: '2024-01-20', 
-    value: 89.90, 
-    status: 'Pendente', 
+  {
+    id: 'inv-4',
+    petId: '2',
+    month: 'Janeiro 2024',
+    dueDate: '2024-01-20',
+    value: 89.90,
+    status: 'Pendente',
     paymentMethod: 'PIX',
     pixKey: '00020126360014BR.GOV.BCB.PIX011412345678901234520400005303986540510.005802BR5913PETLIFE LTDA6009SAO PAULO62070503***6304E22D',
-    link: '#' 
+    link: '#'
   }
 ];

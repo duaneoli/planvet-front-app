@@ -1,13 +1,13 @@
 
-import React, { useState, useMemo } from 'react';
-import { usePets, useAddPet, useDeletePet } from '../hooks/usePets';
-import { Plus, Search, Loader2 } from 'lucide-react';
-import { Pet, PetSpecies } from '../types';
+import Modal from '@/components/modal/Modal';
+import { Loader2, Plus, Search } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import PetCard from '../components/PetCard';
-import Modal from '../components/Modal';
 import Pagination from '../components/Pagination';
+import PetCard from '../components/PetCard';
+import { useAddPet, useDeletePet, usePets } from '../hooks/usePets';
+import { Pet, PetSpecies } from '../types';
 
 const ITEMS_PER_PAGE = 3;
 

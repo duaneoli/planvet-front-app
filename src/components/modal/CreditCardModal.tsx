@@ -1,10 +1,10 @@
 
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import Modal from '@/components/modal/Modal';
+import { UserProfile } from '@/types';
+import { CreditCard, Lock, ShieldCheck } from 'lucide-react';
 import React, { useState } from 'react';
-import Modal from './Modal';
-import Input from './Input';
-import Button from './Button';
-import { CreditCard, ShieldCheck, Lock } from 'lucide-react';
-import { UserProfile } from '../types';
 
 interface CreditCardModalProps {
   isOpen: boolean;

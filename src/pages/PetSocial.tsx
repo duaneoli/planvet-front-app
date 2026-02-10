@@ -1,9 +1,9 @@
 
-import { MOCK_PETS } from '@/constants';
-import { Pet } from '@/types';
 import { Award, Camera, ChevronLeft, Heart, MessageCircle, Share2, Sparkles } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { MOCK_PETS } from '../constants';
+import { Pet } from '../types';
 
 const PetSocial: React.FC = () => {
   const { id } = useParams<{ id: string }>();
