@@ -1,13 +1,13 @@
 
-import Modal from '@/components/modal/Modal';
-import { Loader2, Plus, Search } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
+import { usePets, useAddPet, useDeletePet } from '../hooks/usePets';
+import { Plus, Search, Loader2, Camera, RefreshCw, X } from 'lucide-react';
+import { Pet, PetSpecies } from '../types';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Pagination from '../components/Pagination';
 import PetCard from '../components/PetCard';
-import { useAddPet, useDeletePet, usePets } from '../hooks/usePets';
-import { Pet, PetSpecies } from '../types';
+import Modal from '../components/Modal';
+import Pagination from '../components/Pagination';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -15,11 +15,16 @@ const Pets: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
+  
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const [newPet, setNewPet] = useState<Partial<Pet>>({
     species: PetSpecies.DOG,
   });
 
-  // Consumindo hooks isolados
   const { data: pets = [], isLoading } = usePets();
   const addMutation = useAddPet();
   const deleteMutation = useDeletePet();
@@ -37,6 +42,42 @@ const Pets: React.FC = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
+  const startCamera = async () => {
+    setIsCameraActive(true);
+    setCapturedPhoto(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error("Erro ao acessar câmera:", err);
+      setIsCameraActive(false);
+    }
+  };
+
+  const stopCamera = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+      tracks.forEach(track => track.stop());
+    }
+    setIsCameraActive(false);
+  };
+
+  const takePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const context = canvasRef.current.getContext('2d');
+      if (context) {
+        canvasRef.current.width = videoRef.current.videoWidth;
+        canvasRef.current.height = videoRef.current.videoHeight;
+        context.drawImage(videoRef.current, 0, 0);
+        const photoData = canvasRef.current.toDataURL('image/jpeg');
+        setCapturedPhoto(photoData);
+        stopCamera();
+      }
+    }
+  };
+
   const handleAddPet = (e: React.FormEvent) => {
     e.preventDefault();
     const petToAdd: Pet = {
@@ -46,7 +87,7 @@ const Pets: React.FC = () => {
       breed: newPet.breed || 'SRD',
       age: Number(newPet.age) || 1,
       weight: Number(newPet.weight) || 0,
-      photo: 'https://picsum.photos/seed/' + Math.random() + '/400/400',
+      photo: capturedPhoto || 'https://picsum.photos/seed/' + Math.random() + '/400/400',
       planId: 'plan-custom'
     };
     
@@ -54,6 +95,7 @@ const Pets: React.FC = () => {
       onSuccess: () => {
         setShowAddModal(false);
         setNewPet({ species: PetSpecies.DOG });
+        setCapturedPhoto(null);
       }
     });
   };
@@ -112,10 +154,43 @@ const Pets: React.FC = () => {
 
       <Modal 
         isOpen={showAddModal} 
-        onClose={() => setShowAddModal(false)} 
+        onClose={() => {
+          setShowAddModal(false);
+          stopCamera();
+        }} 
         title="Cadastrar Novo Pet"
       >
         <form onSubmit={handleAddPet} className="space-y-4">
+          {/* Foto do Pet Section */}
+          <div className="flex flex-col items-center space-y-3 mb-6">
+            <div className="relative w-32 h-32 rounded-3xl bg-slate-100 overflow-hidden border-2 border-slate-200 flex items-center justify-center">
+              {capturedPhoto ? (
+                <img src={capturedPhoto} className="w-full h-full object-cover" alt="Captured" />
+              ) : isCameraActive ? (
+                <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover scale-x-[-1]" />
+              ) : (
+                <Camera className="text-slate-300" size={40} />
+              )}
+              <canvas ref={canvasRef} className="hidden" />
+            </div>
+            
+            <div className="flex gap-2">
+              {!isCameraActive && !capturedPhoto ? (
+                <Button type="button" variant="secondary" size="sm" onClick={startCamera} icon={<Camera size={16} />}>
+                  Tirar Foto
+                </Button>
+              ) : isCameraActive ? (
+                <Button type="button" variant="primary" size="sm" onClick={takePhoto}>
+                  Capturar
+                </Button>
+              ) : (
+                <Button type="button" variant="outline" size="sm" onClick={startCamera} icon={<RefreshCw size={16} />}>
+                  Refazer
+                </Button>
+              )}
+            </div>
+          </div>
+
           <Input 
             required
             label="Nome do Pet"

@@ -1,16 +1,18 @@
 
-import { MOCK_PETS } from '@/constants';
-import { Pet } from '@/types';
-import { Award, Camera, ChevronLeft, Heart, MessageCircle, Share2, Sparkles } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { MOCK_PETS } from '../constants';
+import { Sparkles, MessageCircle, Heart, Share2, Award, Camera, ChevronLeft, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { generatePetBio, generatePetPortrait } from '../geminiService';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Pet } from '../types';
 
 const PetSocial: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
   const [traits, setTraits] = useState('');
-  const [generating, setGenerating] = useState(false);
+  const [generatingBio, setGeneratingBio] = useState(false);
+  const [generatingPortrait, setGeneratingPortrait] = useState(false);
   const [posts, setPosts] = useState([
     { id: 1, content: "Acabei de ganhar um petisco novo da PetLife! Miau!", likes: 12, date: "Hoje" },
     { id: 2, content: "Dia de consulta! Fui muito corajosa.", likes: 45, date: "Ontem" }
@@ -21,18 +23,33 @@ const PetSocial: React.FC = () => {
     if (pet) {
       setSelectedPet(pet);
     } else {
-      // Se não achar o pet, volta para a lista
       navigate('/pets');
     }
   }, [id, navigate]);
 
   const handleGenerateBio = async () => {
     if (!traits || !selectedPet) return;
-    setGenerating(true);
+    setGeneratingBio(true);
     try {
-      setSelectedPet({ ...selectedPet });
+      const bio = await generatePetBio(selectedPet.name, selectedPet.species, selectedPet.breed, traits);
+      setSelectedPet({ ...selectedPet, bio });
     } finally {
-      setGenerating(false);
+      setGeneratingBio(false);
+    }
+  };
+
+  const handleGeneratePortrait = async () => {
+    if (!selectedPet) return;
+    setGeneratingPortrait(true);
+    try {
+      const styles = ["Cyberpunk", "Oil Painting", "Pixar Animation", "Royal Victorian", "Watercolor"];
+      const randomStyle = styles[Math.floor(Math.random() * styles.length)];
+      const portrait = await generatePetPortrait(selectedPet.name, selectedPet.species, selectedPet.breed, randomStyle);
+      if (portrait) {
+        setSelectedPet({ ...selectedPet, photo: portrait });
+      }
+    } finally {
+      setGeneratingPortrait(false);
     }
   };
 
@@ -60,8 +77,22 @@ const PetSocial: React.FC = () => {
           <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
             <div className="h-32 bg-emerald-600 relative">
               <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
-                <div className="w-24 h-24 rounded-full border-4 border-white overflow-hidden shadow-lg">
+                <div className="w-24 h-24 rounded-full border-4 border-white overflow-hidden shadow-lg relative group">
                   <img src={selectedPet.photo} alt={selectedPet.name} className="w-full h-full object-cover" />
+                  <button 
+                    onClick={handleGeneratePortrait}
+                    disabled={generatingPortrait}
+                    className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-100"
+                  >
+                    {generatingPortrait ? (
+                      <Loader2 className="animate-spin text-white" size={24} />
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <ImageIcon className="text-white" size={20} />
+                        <span className="text-[8px] text-white font-bold uppercase mt-1">AI Avatar</span>
+                      </div>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
@@ -105,10 +136,10 @@ const PetSocial: React.FC = () => {
             />
             <button 
               onClick={handleGenerateBio}
-              disabled={generating || !traits}
+              disabled={generatingBio || !traits}
               className="w-full bg-slate-800 text-white py-2 rounded-xl text-sm font-semibold hover:bg-slate-900 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
             >
-              {generating ? 'Criando...' : 'Gerar Bio com IA'}
+              {generatingBio ? 'Criando...' : 'Gerar Bio com IA'}
             </button>
           </div>
         </div>

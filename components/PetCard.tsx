@@ -1,8 +1,10 @@
-import Button from '@/components/Button';
-import { Badge, Edit3, Share2, Trash2 } from 'lucide-react';
+
 import React from 'react';
+import { Share2, Edit3, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Pet } from '../types';
+import Badge from './Badge';
+import Button from './Button';
 
 interface PetCardProps {
   pet: Pet;

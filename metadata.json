@@ -2,6 +2,7 @@
   "name": "PetLife - Gestão de Plano Veterinário",
   "description": "Uma plataforma completa para gestão de planos de saúde animal, incluindo cadastro de pets, financeiro, contratos e perfil social pet.",
   "requestFramePermissions": [
-    "camera"
+    "camera",
+    "microphone"
   ]
 }

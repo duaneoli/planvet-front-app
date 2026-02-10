@@ -1,6 +1,6 @@
 
-import { MOCK_CONTRACTS, MOCK_INVOICES, MOCK_PETS } from '@/constants';
-import { Contract, Invoice, Pet } from '@/types';
+import { MOCK_PETS, MOCK_INVOICES, MOCK_CONTRACTS } from './constants';
+import { Pet, Invoice, Contract } from './types';
 
 // Simulador de delay de rede
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));

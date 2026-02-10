@@ -1,14 +1,14 @@
 
-import CreditCardModal from '@/components/modal/CreditCardModal';
-import PaymentModal from '@/components/modal/PaymentModal';
-import { Clock, CreditCard, Download, Eye, Loader2, Settings } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
-import Badge from '../components/Badge';
-import Button from '../components/Button';
-import Pagination from '../components/Pagination';
-import { MOCK_USER } from '../constants';
+import React, { useState, useMemo } from 'react';
 import { useInvoices } from '../hooks/useBilling';
 import { usePets } from '../hooks/usePets';
+import { MOCK_USER } from '../constants';
+import { CreditCard, Download, Clock, Settings, Eye, Filter, Plus, Loader2 } from 'lucide-react';
+import Badge from '../components/Badge';
+import Button from '../components/Button';
+import PaymentModal from '../components/PaymentModal';
+import CreditCardModal from '../components/CreditCardModal';
+import Pagination from '../components/Pagination';
 import { UserProfile } from '../types';
 
 const ITEMS_PER_PAGE = 5;
