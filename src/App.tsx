@@ -1,18 +1,17 @@
+import PublicRouter from "@/pages/public";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Billing from "./pages/Billing";
 import Contracts from "./pages/Contracts";
 import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
 import Pets from "./pages/Pets";
 import PetSocial from "./pages/PetSocial";
 import Profile from "./pages/Profile";
-import SignUp from "./pages/SignUp";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -69,28 +68,16 @@ const AppRoutes: React.FC = () => {
     );
   }
 
-  return (
-    <Routes>
-      {!isAuthenticated ? (
-        <>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </>
-      ) : (
-        <Route path="*" element={<AuthenticatedLayout />} />
-      )}
-    </Routes>
-  );
+  return !isAuthenticated ? <PublicRouter /> : <AuthenticatedLayout />;
 };
 
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <HashRouter>
+        <BrowserRouter>
           <AppRoutes />
-        </HashRouter>
+        </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>
   );

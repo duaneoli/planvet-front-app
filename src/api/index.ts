@@ -1,5 +1,5 @@
-import { MOCK_CONTRACTS, MOCK_INVOICES, MOCK_PETS } from "@/constants";
-import { Contract, Invoice, Pet } from "@/types";
+import { MOCK_CONTRACTS, MOCK_INVOICES, MOCK_PETS, MOCK_USER } from "@/constants";
+import { Contract, Invoice, Pet, UserProfile } from "@/types";
 
 // Simulador de delay de rede
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -21,6 +21,17 @@ export const API_ENDPOINTS = {
  * Service Layer: Camada pura de comunicação com o servidor
  */
 export const api = {
+  auth: {
+    validateSession: async (email: string): Promise<UserProfile> => {
+      await delay(1500); // Simulando latência de verificação de token no servidor
+      // Em um cenário real, aqui verificaríamos o JWT.
+      // Se o e-mail for o do nosso mock, consideramos válido.
+      if (email) {
+        return { ...MOCK_USER, email };
+      }
+      throw new Error("Sessão expirada ou inválida");
+    }
+  },
   // --- PETS SERVICE ---
   pets: {
     getAll: async (): Promise<Pet[]> => {

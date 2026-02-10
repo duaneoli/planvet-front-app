@@ -1,5 +1,5 @@
 import App from "@/App";
-import "@/index.css"; // <--- ESTA LINHA É ESSENCIAL
+import "@/index.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
 

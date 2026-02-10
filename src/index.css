@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+/* Mantemos esta regra para garantir que o hover funcione no teu ambiente de desenvolvimento */
+@variant hover (&:hover);
+
+@theme {
+  /* Escala de Azul (Baseada no #024a9b) */
+  --color-azul-100: #e6f0f9;
+  --color-azul-200: #204d74; /* Sua referência */
+  --color-azul-300: #1a6ab5;
+  --color-azul-400: #0a5cb1;
+  --color-azul-500: #024a9b; /* Sua referência (Base) */
+  --color-azul-600: #023d80;
+  --color-azul-700: #012f63;
+
+  /* Escala de Vermelho (Baseada no #e81616) */
+  --color-red-100: #fde8e8;
+  --color-red-200: #d43f3a; /* Sua referência */
+  --color-red-300: #f05252;
+  --color-red-400: #f13c3c;
+  --color-red-500: #e81616; /* Sua referência (Base) */
+  --color-red-600: #c81010;
+  --color-red-700: #9b0d0d;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-main);
+    background-color: var(--color-bg-main);
+    color: var(--color-secondary-500);
+    @apply antialiased;
+  }
+}
