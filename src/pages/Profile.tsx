@@ -1,20 +1,34 @@
 
-import React, { useState } from 'react';
-import { MOCK_USER } from '../constants';
-import { Save, User, Mail, Phone, MapPin, Fingerprint } from 'lucide-react';
+import { Fingerprint, Loader2, Mail, MapPin, Phone, Save, User } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { UserProfile } from '../types';
 
 const Profile: React.FC = () => {
-  const [profile, setProfile] = useState(MOCK_USER);
+  const { user, updateUser } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user) {
+      setProfile(user);
+    }
+  }, [user]);
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!profile) return;
+    
     setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
-      alert('Perfil atualizado com sucesso!');
-    }, 1000);
+    // Simula salvamento
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    updateUser(profile);
+    setIsSaving(false);
+    alert('Perfil atualizado com sucesso!');
   };
+
+  if (!profile) return null;
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -23,8 +37,8 @@ const Profile: React.FC = () => {
           <h2 className="text-2xl font-bold text-slate-800">Dados do Perfil</h2>
           <p className="text-slate-500 text-sm">Mantenha seus dados sempre atualizados para comunicações importantes.</p>
         </div>
-        <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-2xl font-bold text-emerald-700">
-          {profile.name.split(' ').map(n => n[0]).join('')}
+        <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-2xl font-bold text-emerald-700 border-2 border-white shadow-md">
+          {profile.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
         </div>
       </div>
 
@@ -38,7 +52,7 @@ const Profile: React.FC = () => {
               <input 
                 type="text" 
                 value={profile.name}
-                onChange={e => setProfile({...profile, name: e.target.value})}
+                onChange={e => setProfile({...profile!, name: e.target.value})}
                 className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -50,7 +64,7 @@ const Profile: React.FC = () => {
               <input 
                 type="email" 
                 value={profile.email}
-                onChange={e => setProfile({...profile, email: e.target.value})}
+                onChange={e => setProfile({...profile!, email: e.target.value})}
                 className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -62,7 +76,7 @@ const Profile: React.FC = () => {
               <input 
                 type="text" 
                 value={profile.phone}
-                onChange={e => setProfile({...profile, phone: e.target.value})}
+                onChange={e => setProfile({...profile!, phone: e.target.value})}
                 className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -87,7 +101,7 @@ const Profile: React.FC = () => {
             <input 
               type="text" 
               value={profile.address}
-              onChange={e => setProfile({...profile, address: e.target.value})}
+              onChange={e => setProfile({...profile!, address: e.target.value})}
               className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
@@ -99,7 +113,7 @@ const Profile: React.FC = () => {
             disabled={isSaving}
             className="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:bg-emerald-700 shadow-lg shadow-emerald-100 disabled:opacity-50 transition-all"
           >
-            <Save size={18} />
+            {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
             {isSaving ? 'Salvando...' : 'Salvar Alterações'}
           </button>
         </div>

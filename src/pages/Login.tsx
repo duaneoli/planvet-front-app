@@ -1,25 +1,26 @@
 
+import { AlertCircle, ChevronRight, Dog, Lock, Mail } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Dog, Mail, Lock, ChevronRight, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-interface LoginProps {
-  onLogin: () => void;
-}
-
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    // Simula uma chamada de API
-    setTimeout(() => {
-      onLogin();
-      setLoading(false);
-    }, 1000);
+    setIsSubmitting(true);
+    try {
+      await login(email, password);
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      alert("Erro ao entrar. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -71,11 +72,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </div>
 
             <button
-              disabled={loading}
+              disabled={isSubmitting}
               type="submit"
               className="w-full bg-emerald-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 flex items-center justify-center space-x-2 disabled:opacity-50"
             >
-              {loading ? (
+              {isSubmitting ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <>
