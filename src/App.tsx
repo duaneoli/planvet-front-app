@@ -1,19 +1,18 @@
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
-import React, { useState } from 'react';
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Billing from './pages/Billing';
-import Contracts from './pages/Contracts';
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import Pets from './pages/Pets';
-import PetSocial from './pages/PetSocial';
-import Profile from './pages/Profile';
-import SignUp from './pages/SignUp';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import React, { useState } from "react";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import Billing from "./pages/Billing";
+import Contracts from "./pages/Contracts";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Pets from "./pages/Pets";
+import PetSocial from "./pages/PetSocial";
+import Profile from "./pages/Profile";
+import SignUp from "./pages/SignUp";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,18 +32,15 @@ const AuthenticatedLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
-      <Sidebar 
-        isCollapsed={isCollapsed} 
-        isOpen={isSidebarOpen} 
-        onToggleCollapse={() => setIsCollapsed(!isCollapsed)} 
-        onCloseMobile={() => setIsSidebarOpen(false)} 
+      <Sidebar
+        isCollapsed={isCollapsed}
+        isOpen={isSidebarOpen}
+        onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+        onCloseMobile={() => setIsSidebarOpen(false)}
       />
 
       <main className="flex-1 overflow-y-auto relative">
-        <Header 
-          onOpenSidebar={() => setIsSidebarOpen(true)} 
-          onLogout={logout} 
-        />
+        <Header onOpenSidebar={() => setIsSidebarOpen(true)} onLogout={logout} />
 
         <div className="max-w-6xl mx-auto p-4 lg:p-8">
           <Routes>

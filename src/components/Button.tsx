@@ -1,40 +1,40 @@
-
-import React from 'react';
+import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  size?: "sm" | "md" | "lg";
   isLoading?: boolean;
   icon?: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  isLoading, 
+const Button: React.FC<ButtonProps> = ({
+  children,
+  variant = "primary",
+  size = "md",
+  isLoading,
   icon,
-  className = '',
-  ...props 
+  className = "",
+  ...props
 }) => {
-  const baseStyles = "inline-flex items-center justify-center rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
-  
+  const baseStyles =
+    "inline-flex items-center justify-center rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
+
   const variants = {
     primary: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-100",
     secondary: "bg-emerald-50 text-emerald-700 hover:bg-emerald-100",
     outline: "bg-transparent border border-slate-200 text-slate-600 hover:bg-slate-50",
     ghost: "bg-transparent text-slate-500 hover:bg-slate-100 hover:text-slate-700",
-    danger: "bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white"
+    danger: "bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white",
   };
 
   const sizes = {
     sm: "px-3 py-1.5 text-xs",
     md: "px-4 py-2.5 text-sm",
-    lg: "px-6 py-4 text-base"
+    lg: "px-6 py-4 text-base",
   };
 
   return (
-    <button 
+    <button
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={isLoading || props.disabled}
       {...props}

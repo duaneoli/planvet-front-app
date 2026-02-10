@@ -1,9 +1,8 @@
-
-import { useQuery } from '@tanstack/react-query';
-import { api } from '../api';
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../api";
 
 export const BILLING_KEYS = {
-  invoices: ['invoices'] as const,
+  invoices: ["invoices"] as const,
 };
 
 export const useInvoices = () => {

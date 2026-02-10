@@ -1,28 +1,32 @@
-
-import { Award, Camera, ChevronLeft, Heart, MessageCircle, Share2, Sparkles } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { MOCK_PETS } from '../constants';
-import { Pet } from '../types';
+import { Award, Camera, ChevronLeft, Heart, MessageCircle, Share2, Sparkles } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { MOCK_PETS } from "../constants";
+import { Pet } from "../types";
 
 const PetSocial: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
-  const [traits, setTraits] = useState('');
+  const [traits, setTraits] = useState("");
   const [generating, setGenerating] = useState(false);
   const [posts, setPosts] = useState([
-    { id: 1, content: "Acabei de ganhar um petisco novo da PetLife! Miau!", likes: 12, date: "Hoje" },
-    { id: 2, content: "Dia de consulta! Fui muito corajosa.", likes: 45, date: "Ontem" }
+    {
+      id: 1,
+      content: "Acabei de ganhar um petisco novo da PetLife! Miau!",
+      likes: 12,
+      date: "Hoje",
+    },
+    { id: 2, content: "Dia de consulta! Fui muito corajosa.", likes: 45, date: "Ontem" },
   ]);
 
   useEffect(() => {
-    const pet = MOCK_PETS.find(p => p.id === id);
+    const pet = MOCK_PETS.find((p) => p.id === id);
     if (pet) {
       setSelectedPet(pet);
     } else {
       // Se não achar o pet, volta para a lista
-      navigate('/pets');
+      navigate("/pets");
     }
   }, [id, navigate]);
 
@@ -36,16 +40,20 @@ const PetSocial: React.FC = () => {
     }
   };
 
-  if (!selectedPet) return (
-    <div className="flex items-center justify-center h-64">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
-    </div>
-  );
+  if (!selectedPet)
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+      </div>
+    );
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
       <div className="flex items-center space-x-4 mb-2">
-        <Link to="/pets" className="p-2 bg-white rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">
+        <Link
+          to="/pets"
+          className="p-2 bg-white rounded-full border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors shadow-sm"
+        >
           <ChevronLeft size={20} />
         </Link>
         <div>
@@ -61,17 +69,25 @@ const PetSocial: React.FC = () => {
             <div className="h-32 bg-emerald-600 relative">
               <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
                 <div className="w-24 h-24 rounded-full border-4 border-white overflow-hidden shadow-lg">
-                  <img src={selectedPet.photo} alt={selectedPet.name} className="w-full h-full object-cover" />
+                  <img
+                    src={selectedPet.photo}
+                    alt={selectedPet.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
-            
+
             <div className="pt-16 pb-8 px-6 text-center">
               <h3 className="text-2xl font-bold text-slate-800">{selectedPet.name}</h3>
-              <p className="text-slate-500 text-sm mb-4">{selectedPet.breed} • {selectedPet.age} {selectedPet.age === 1 ? 'ano' : 'anos'}</p>
-              
+              <p className="text-slate-500 text-sm mb-4">
+                {selectedPet.breed} • {selectedPet.age} {selectedPet.age === 1 ? "ano" : "anos"}
+              </p>
+
               <div className="bg-emerald-50 text-emerald-700 p-4 rounded-2xl text-sm italic mb-6 min-h-[60px] flex items-center justify-center">
-                "{selectedPet.bio || 'Adicione uma bio para que todos conheçam minha personalidade!'}"
+                "
+                {selectedPet.bio || "Adicione uma bio para que todos conheçam minha personalidade!"}
+                "
               </div>
 
               <div className="flex justify-around border-t border-slate-100 pt-6">
@@ -96,19 +112,21 @@ const PetSocial: React.FC = () => {
               <Sparkles className="text-emerald-500" size={18} />
               Bio Inteligente (AI)
             </h4>
-            <p className="text-xs text-slate-500">Descreva as manias de {selectedPet.name} e deixe a IA criar uma bio incrível!</p>
-            <textarea 
+            <p className="text-xs text-slate-500">
+              Descreva as manias de {selectedPet.name} e deixe a IA criar uma bio incrível!
+            </p>
+            <textarea
               value={traits}
-              onChange={e => setTraits(e.target.value)}
+              onChange={(e) => setTraits(e.target.value)}
               placeholder="Ex: Gosta de dormir na rede, odeia banho, ama maçã..."
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm h-24 focus:ring-2 focus:ring-emerald-500 outline-none"
             />
-            <button 
+            <button
               onClick={handleGenerateBio}
               disabled={generating || !traits}
               className="w-full bg-slate-800 text-white py-2 rounded-xl text-sm font-semibold hover:bg-slate-900 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
             >
-              {generating ? 'Criando...' : 'Gerar Bio com IA'}
+              {generating ? "Criando..." : "Gerar Bio com IA"}
             </button>
           </div>
         </div>
@@ -117,9 +135,9 @@ const PetSocial: React.FC = () => {
         <div className="flex-1 space-y-6">
           <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
             <img src={selectedPet.photo} className="w-10 h-10 rounded-full object-cover" />
-            <input 
-              type="text" 
-              placeholder={`O que ${selectedPet.name} está fazendo agora?`} 
+            <input
+              type="text"
+              placeholder={`O que ${selectedPet.name} está fazendo agora?`}
               className="flex-1 bg-slate-50 border border-slate-200 rounded-full px-4 py-2 outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
             />
             <button className="bg-emerald-100 text-emerald-600 p-2 rounded-full hover:bg-emerald-200">
@@ -128,8 +146,11 @@ const PetSocial: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            {posts.map(post => (
-              <div key={post.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            {posts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <img src={selectedPet.photo} className="w-8 h-8 rounded-full object-cover" />
@@ -138,7 +159,10 @@ const PetSocial: React.FC = () => {
                       <p className="text-[10px] text-slate-400">{post.date}</p>
                     </div>
                   </div>
-                  <Share2 className="text-slate-300 hover:text-emerald-600 cursor-pointer" size={18} />
+                  <Share2
+                    className="text-slate-300 hover:text-emerald-600 cursor-pointer"
+                    size={18}
+                  />
                 </div>
                 <p className="text-slate-700 mb-6">{post.content}</p>
                 <div className="flex items-center gap-6 text-slate-500 text-sm pt-4 border-t border-slate-50">

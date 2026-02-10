@@ -1,12 +1,11 @@
-
-import { AlertCircle, ChevronRight, Dog, Lock, Mail } from 'lucide-react';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { AlertCircle, ChevronRight, Dog, Lock, Mail } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
 
@@ -39,9 +38,14 @@ const Login: React.FC = () => {
         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 shadow-slate-200/50">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-tight">E-mail</label>
+              <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-tight">
+                E-mail
+              </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <Mail
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={18}
+                />
                 <input
                   required
                   type="email"
@@ -55,11 +59,21 @@ const Login: React.FC = () => {
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-bold text-slate-700 uppercase tracking-tight">Senha</label>
-                <button type="button" className="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Esqueci a senha</button>
+                <label className="text-sm font-bold text-slate-700 uppercase tracking-tight">
+                  Senha
+                </label>
+                <button
+                  type="button"
+                  className="text-xs font-semibold text-emerald-600 hover:text-emerald-700"
+                >
+                  Esqueci a senha
+                </button>
               </div>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <Lock
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={18}
+                />
                 <input
                   required
                   type="password"
@@ -89,14 +103,21 @@ const Login: React.FC = () => {
 
           <div className="mt-8 pt-8 border-t border-slate-50 text-center">
             <p className="text-slate-500">Não tem uma conta?</p>
-            <Link to="/signup" className="text-emerald-600 font-bold hover:underline mt-1 inline-block">Criar conta gratuitamente</Link>
+            <Link
+              to="/signup"
+              className="text-emerald-600 font-bold hover:underline mt-1 inline-block"
+            >
+              Criar conta gratuitamente
+            </Link>
           </div>
         </div>
 
         {/* Security Badge */}
         <div className="mt-8 flex items-center justify-center space-x-2 text-slate-400">
           <AlertCircle size={14} />
-          <p className="text-[10px] uppercase font-bold tracking-widest">Acesso seguro criptografado</p>
+          <p className="text-[10px] uppercase font-bold tracking-widest">
+            Acesso seguro criptografado
+          </p>
         </div>
       </div>
     </div>

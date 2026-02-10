@@ -1,9 +1,8 @@
-
-import { MOCK_CONTRACTS, MOCK_INVOICES, MOCK_PETS } from '@/constants';
-import { Contract, Invoice, Pet } from '@/types';
+import { MOCK_CONTRACTS, MOCK_INVOICES, MOCK_PETS } from "@/constants";
+import { Contract, Invoice, Pet } from "@/types";
 
 // Simulador de delay de rede
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 // Simulação de "Database" local para persistência na sessão
 let dbPets = [...MOCK_PETS];
@@ -13,9 +12,9 @@ let dbPets = [...MOCK_PETS];
  * Facilita a manutenção caso os endpoints mudem.
  */
 export const API_ENDPOINTS = {
-  PETS: '/pets',
-  INVOICES: '/billing/invoices',
-  CONTRACTS: '/contracts',
+  PETS: "/pets",
+  INVOICES: "/billing/invoices",
+  CONTRACTS: "/contracts",
 };
 
 /**
@@ -30,7 +29,7 @@ export const api = {
     },
     getById: async (id: string): Promise<Pet | undefined> => {
       await delay(400);
-      return dbPets.find(p => p.id === id);
+      return dbPets.find((p) => p.id === id);
     },
     create: async (pet: Pet): Promise<Pet> => {
       await delay(1000);
@@ -39,13 +38,13 @@ export const api = {
     },
     delete: async (id: string): Promise<void> => {
       await delay(500);
-      dbPets = dbPets.filter(p => p.id !== id);
+      dbPets = dbPets.filter((p) => p.id !== id);
     },
     update: async (id: string, data: Partial<Pet>): Promise<Pet> => {
       await delay(600);
-      dbPets = dbPets.map(p => p.id === id ? { ...p, ...data } : p);
-      return dbPets.find(p => p.id === id)!;
-    }
+      dbPets = dbPets.map((p) => (p.id === id ? { ...p, ...data } : p));
+      return dbPets.find((p) => p.id === id)!;
+    },
   },
 
   // --- BILLING SERVICE ---
@@ -53,7 +52,7 @@ export const api = {
     getInvoices: async (): Promise<Invoice[]> => {
       await delay(600);
       return [...MOCK_INVOICES];
-    }
+    },
   },
 
   // --- CONTRACTS SERVICE ---
@@ -61,6 +60,6 @@ export const api = {
     getAll: async (): Promise<Contract[]> => {
       await delay(700);
       return [...MOCK_CONTRACTS];
-    }
-  }
+    },
+  },
 };

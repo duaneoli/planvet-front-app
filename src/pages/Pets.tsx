@@ -1,18 +1,17 @@
-
-import Modal from '@/components/modal/Modal';
-import { Loader2, Plus, Search } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Pagination from '../components/Pagination';
-import PetCard from '../components/PetCard';
-import { useAddPet, useDeletePet, usePets } from '../hooks/usePets';
-import { Pet, PetSpecies } from '../types';
+import Modal from "@/components/modal/Modal";
+import { Loader2, Plus, Search } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import Button from "../components/Button";
+import Input from "../components/Input";
+import Pagination from "../components/Pagination";
+import PetCard from "../components/PetCard";
+import { useAddPet, useDeletePet, usePets } from "../hooks/usePets";
+import { Pet, PetSpecies } from "../types";
 
 const ITEMS_PER_PAGE = 3;
 
 const Pets: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newPet, setNewPet] = useState<Partial<Pet>>({
@@ -25,9 +24,10 @@ const Pets: React.FC = () => {
   const deleteMutation = useDeletePet();
 
   const filteredPets = useMemo(() => {
-    return pets.filter(pet => 
-      pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pet.breed.toLowerCase().includes(searchTerm.toLowerCase())
+    return pets.filter(
+      (pet) =>
+        pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pet.breed.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [pets, searchTerm]);
 
@@ -41,25 +41,25 @@ const Pets: React.FC = () => {
     e.preventDefault();
     const petToAdd: Pet = {
       id: Math.random().toString(36).substr(2, 9),
-      name: newPet.name || 'Pet Sem Nome',
+      name: newPet.name || "Pet Sem Nome",
       species: newPet.species as PetSpecies,
-      breed: newPet.breed || 'SRD',
+      breed: newPet.breed || "SRD",
       age: Number(newPet.age) || 1,
       weight: Number(newPet.weight) || 0,
-      photo: 'https://picsum.photos/seed/' + Math.random() + '/400/400',
-      planId: 'plan-custom'
+      photo: "https://picsum.photos/seed/" + Math.random() + "/400/400",
+      planId: "plan-custom",
     };
-    
+
     addMutation.mutate(petToAdd, {
       onSuccess: () => {
         setShowAddModal(false);
         setNewPet({ species: PetSpecies.DOG });
-      }
+      },
     });
   };
 
   const handleDeletePet = (id: string) => {
-    if (confirm('Deseja realmente remover este pet?')) {
+    if (confirm("Deseja realmente remover este pet?")) {
       deleteMutation.mutate(id);
     }
   };
@@ -76,9 +76,9 @@ const Pets: React.FC = () => {
         </Button>
       </div>
 
-      <Input 
-        icon={<Search size={20} />} 
-        placeholder="Buscar pet por nome ou raça..." 
+      <Input
+        icon={<Search size={20} />}
+        placeholder="Buscar pet por nome ou raça..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -91,7 +91,7 @@ const Pets: React.FC = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedPets.map(pet => (
+            {paginatedPets.map((pet) => (
               <PetCard key={pet.id} pet={pet} onDelete={handleDeletePet} />
             ))}
           </div>
@@ -102,72 +102,71 @@ const Pets: React.FC = () => {
             </div>
           )}
 
-          <Pagination 
-            currentPage={currentPage} 
-            totalPages={totalPages} 
-            onPageChange={setCurrentPage} 
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
           />
         </>
       )}
 
-      <Modal 
-        isOpen={showAddModal} 
-        onClose={() => setShowAddModal(false)} 
+      <Modal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
         title="Cadastrar Novo Pet"
       >
         <form onSubmit={handleAddPet} className="space-y-4">
-          <Input 
+          <Input
             required
             label="Nome do Pet"
             placeholder="Ex: Rex"
-            value={newPet.name || ''}
-            onChange={e => setNewPet({...newPet, name: e.target.value})}
+            value={newPet.name || ""}
+            onChange={(e) => setNewPet({ ...newPet, name: e.target.value })}
           />
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-bold text-slate-400 uppercase ml-1">Espécie</label>
-              <select 
+              <select
                 value={newPet.species}
-                onChange={e => setNewPet({...newPet, species: e.target.value as PetSpecies})}
+                onChange={(e) => setNewPet({ ...newPet, species: e.target.value as PetSpecies })}
                 className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 text-sm text-slate-700"
               >
-                {Object.values(PetSpecies).map(s => <option key={s} value={s}>{s}</option>)}
+                {Object.values(PetSpecies).map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
               </select>
             </div>
-            <Input 
+            <Input
               label="Raça"
               placeholder="Ex: Golden"
-              value={newPet.breed || ''}
-              onChange={e => setNewPet({...newPet, breed: e.target.value})}
+              value={newPet.breed || ""}
+              onChange={(e) => setNewPet({ ...newPet, breed: e.target.value })}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Input 
+            <Input
               label="Idade (anos)"
               type="number"
               placeholder="0"
-              value={newPet.age || ''}
-              onChange={e => setNewPet({...newPet, age: Number(e.target.value)})}
+              value={newPet.age || ""}
+              onChange={(e) => setNewPet({ ...newPet, age: Number(e.target.value) })}
             />
-            <Input 
+            <Input
               label="Peso (kg)"
               type="number"
               step="0.1"
               placeholder="0.0"
-              value={newPet.weight || ''}
-              onChange={e => setNewPet({...newPet, weight: Number(e.target.value)})}
+              value={newPet.weight || ""}
+              onChange={(e) => setNewPet({ ...newPet, weight: Number(e.target.value) })}
             />
           </div>
 
           <div className="pt-4">
-            <Button 
-              type="submit" 
-              className="w-full" 
-              size="lg" 
-              isLoading={addMutation.isPending}
-            >
+            <Button type="submit" className="w-full" size="lg" isLoading={addMutation.isPending}>
               Confirmar Cadastro
             </Button>
           </div>

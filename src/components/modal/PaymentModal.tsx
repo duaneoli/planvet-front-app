@@ -1,8 +1,7 @@
-
-import Button from '@/components/Button';
-import Modal from '@/components/modal/Modal';
-import { Barcode, Check, Copy, QrCode } from 'lucide-react';
-import React from 'react';
+import Button from "@/components/Button";
+import Modal from "@/components/modal/Modal";
+import { Barcode, Check, Copy, QrCode } from "lucide-react";
+import React from "react";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -29,7 +28,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
           <p className="text-4xl font-black text-slate-800">R$ {invoice.value.toFixed(2)}</p>
         </div>
 
-        {invoice.paymentMethod === 'PIX' ? (
+        {invoice.paymentMethod === "PIX" ? (
           <div className="space-y-4">
             <div className="bg-emerald-50 p-6 rounded-2xl flex flex-col items-center justify-center border border-emerald-100">
               <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
@@ -41,15 +40,17 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase ml-1">Copia e Cola</label>
+              <label className="text-xs font-bold text-slate-400 uppercase ml-1">
+                Copia e Cola
+              </label>
               <div className="relative">
-                <input 
-                  readOnly 
-                  value={invoice.pixKey || ''}
+                <input
+                  readOnly
+                  value={invoice.pixKey || ""}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-mono text-slate-500 pr-12 outline-none"
                 />
-                <button 
-                  onClick={() => handleCopy(invoice.pixKey || '')}
+                <button
+                  onClick={() => handleCopy(invoice.pixKey || "")}
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
                 >
                   {copied ? <Check size={18} /> : <Copy size={18} />}
@@ -57,7 +58,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
               </div>
             </div>
           </div>
-        ) : invoice.paymentMethod === 'Boleto' ? (
+        ) : invoice.paymentMethod === "Boleto" ? (
           <div className="space-y-4">
             <div className="bg-slate-50 p-6 rounded-2xl flex flex-col items-center justify-center border border-slate-200">
               <Barcode size={64} className="text-slate-400 mb-2" />
@@ -66,22 +67,26 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 uppercase ml-1">Linha Digitável</label>
+              <label className="text-xs font-bold text-slate-400 uppercase ml-1">
+                Linha Digitável
+              </label>
               <div className="relative">
-                <input 
-                  readOnly 
+                <input
+                  readOnly
                   value="34191.09008 63561.952014 21711.600006 1 95920000012990"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-mono text-slate-500 pr-12 outline-none"
                 />
-                <button 
-                  onClick={() => handleCopy("34191.09008 63561.952014 21711.600006 1 95920000012990")}
+                <button
+                  onClick={() =>
+                    handleCopy("34191.09008 63561.952014 21711.600006 1 95920000012990")
+                  }
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
                 >
                   {copied ? <Check size={18} /> : <Copy size={18} />}
                 </button>
               </div>
             </div>
-            
+
             <Button variant="outline" className="w-full" icon={<Copy size={16} />}>
               Baixar PDF do Boleto
             </Button>
@@ -89,7 +94,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
         ) : (
           <div className="bg-blue-50 p-6 rounded-2xl text-center border border-blue-100">
             <p className="text-sm text-blue-700 font-medium">
-              Esta fatura será cobrada automaticamente no seu cartão final <strong>{invoice.cardLastDigits || '4589'}</strong> no dia do vencimento.
+              Esta fatura será cobrada automaticamente no seu cartão final{" "}
+              <strong>{invoice.cardLastDigits || "4589"}</strong> no dia do vencimento.
             </p>
           </div>
         )}

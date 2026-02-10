@@ -1,10 +1,9 @@
-
 export enum PetSpecies {
-  DOG = 'Cachorro',
-  CAT = 'Gato',
-  BIRD = 'Pássaro',
-  REPTILE = 'Répteis',
-  OTHER = 'Outro'
+  DOG = "Cachorro",
+  CAT = "Gato",
+  BIRD = "Pássaro",
+  REPTILE = "Répteis",
+  OTHER = "Outro",
 }
 
 export interface Pet {
@@ -23,11 +22,11 @@ export interface Contract {
   id: string;
   petId: string;
   planName: string;
-  status: 'Ativo' | 'Suspenso' | 'Cancelado';
+  status: "Ativo" | "Suspenso" | "Cancelado";
   startDate: string;
   renewalDate: string;
   monthlyValue: number;
-  paymentMethod: 'Cartão' | 'Boleto' | 'PIX';
+  paymentMethod: "Cartão" | "Boleto" | "PIX";
 }
 
 export interface Invoice {
@@ -36,8 +35,8 @@ export interface Invoice {
   month: string;
   dueDate: string;
   value: number;
-  status: 'Pago' | 'Pendente' | 'Atrasado';
-  paymentMethod: 'Cartão' | 'Boleto' | 'PIX';
+  status: "Pago" | "Pendente" | "Atrasado";
+  paymentMethod: "Cartão" | "Boleto" | "PIX";
   link: string;
   pixKey?: string;
   barcode?: string;

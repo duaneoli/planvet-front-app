@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+.env
+.env.*
+.git
+.gitignore
+*.lock
+yarn.lock
+CHANGELOG.md
+LICENSE
+README.md

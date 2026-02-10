@@ -1,14 +1,13 @@
-
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../api';
-import { Pet } from '../types';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "../api";
+import { Pet } from "../types";
 
 /**
  * Padrão de chaves de query centralizado para evitar erros de digitação
  */
 export const PET_KEYS = {
-  all: ['pets'] as const,
-  detail: (id: string) => ['pets', id] as const,
+  all: ["pets"] as const,
+  detail: (id: string) => ["pets", id] as const,
 };
 
 export const usePets = () => {
@@ -50,7 +49,7 @@ export const useDeletePet = () => {
 export const useUpdatePet = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string, data: Partial<Pet> }) => api.pets.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<Pet> }) => api.pets.update(id, data),
     onSuccess: (updatedPet) => {
       queryClient.invalidateQueries({ queryKey: PET_KEYS.all });
       queryClient.invalidateQueries({ queryKey: PET_KEYS.detail(updatedPet.id) });

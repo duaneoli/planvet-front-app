@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
   currentPage: number;
@@ -24,15 +23,17 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       </button>
 
       <div className="flex items-center space-x-1">
-        {pages.map(page => (
+        {pages.map((page) => (
           <button
             key={page}
             onClick={() => onPageChange(page)}
             className={`
               w-10 h-10 rounded-lg text-sm font-bold transition-all
-              ${currentPage === page 
-                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-100' 
-                : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 border border-transparent'}
+              ${
+                currentPage === page
+                  ? "bg-emerald-600 text-white shadow-md shadow-emerald-100"
+                  : "text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 border border-transparent"
+              }
             `}
           >
             {page}
