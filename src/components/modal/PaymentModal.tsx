@@ -1,8 +1,8 @@
 
+import Button from '@/components/Button';
+import Modal from '@/components/modal/Modal';
+import { Barcode, Check, Copy, QrCode } from 'lucide-react';
 import React from 'react';
-import Modal from './Modal';
-import Button from './Button';
-import { QrCode, Copy, Check, Barcode } from 'lucide-react';
 
 interface PaymentModalProps {
   isOpen: boolean;

@@ -1,17 +1,17 @@
 
-import React, { useState } from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
+import Billing from '@/pages/Billing';
+import Contracts from '@/pages/Contracts';
+import Dashboard from '@/pages/Dashboard';
+import Login from '@/pages/Login';
+import Pets from '@/pages/Pets';
+import PetSocial from '@/pages/PetSocial';
+import Profile from '@/pages/Profile';
+import SignUp from '@/pages/SignUp';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
-import Dashboard from './pages/Dashboard';
-import Pets from './pages/Pets';
-import Contracts from './pages/Contracts';
-import Billing from './pages/Billing';
-import Profile from './pages/Profile';
-import PetSocial from './pages/PetSocial';
-import Login from './pages/Login';
-import SignUp from './pages/SignUp';
+import React, { useState } from 'react';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 const queryClient = new QueryClient({
   defaultOptions: {
