@@ -1,21 +1,44 @@
 import { Contract, Invoice, Pet, PetSpecies, UserProfile } from "@/types";
 
-export const BREEDS_BY_SPECIES: Record<string, string[]> = {
-  [PetSpecies.DOG]: [
-    "Beagle",
-    "Bulldog",
-    "Golden Retriever",
-    "Labrador",
-    "Poodle",
-    "Pug",
-    "SRD (Vira-lata)",
-    "Yorkshire",
+export const BREEDS_BY_SPECIES: Record<string, Array<{ id: number; breed: string }>> = {
+  1: [
+    { id: 1, breed: "Beagle" },
+    { id: 2, breed: "Bulldog" },
+    { id: 3, breed: "Golden Retriever" },
+    { id: 4, breed: "Labrador" },
+    { id: 5, breed: "Poodle" },
+    { id: 6, breed: "Pug" },
+    { id: 7, breed: "SRD (Vira-lata)" },
+    { id: 8, breed: "Yorkshire" },
   ],
-  [PetSpecies.CAT]: ["Persa", "Siamês", "Maine Coon", "Angorá", "Bengal", "SRD (Vira-lata)"],
-  [PetSpecies.BIRD]: ["Calopsita", "Canário", "Papagaio", "Periquito"],
-  [PetSpecies.REPTILE]: ["Iguana", "Jabuti", "Tartaruga"],
-  [PetSpecies.OTHER]: ["Hamster", "Coelho", "Porquinho da Índia"],
+  2: [
+    { id: 1, breed: "Persa" },
+    { id: 2, breed: "Siamês" },
+    { id: 3, breed: "Maine Coon" },
+    { id: 4, breed: "Angorá" },
+    { id: 5, breed: "Bengal" },
+    { id: 6, breed: "SRD (Vira-lata)" },
+  ],
+  3: [
+    { id: 1, breed: "Calopsita" },
+    { id: 2, breed: "Canário" },
+    { id: 3, breed: "Papagaio" },
+    { id: 4, breed: "Periquito" },
+  ],
+  4: [
+    { id: 1, breed: "Iguana" },
+    { id: 2, breed: "Jabuti" },
+    { id: 3, breed: "Tartaruga" },
+  ],
+  5: [
+    { id: 1, breed: "Hamster" },
+    { id: 2, breed: "Coelho" },
+    { id: 3, breed: "Porquinho da Índia" },
+  ],
 };
+
+export const paymentMethodConstant = ["Cartão", "Boleto", "PIX"] as const
+export const dueDateConstant = ['1', '5', '10', '15', '20', '25'] as const
 
 export const MOCK_USER: UserProfile = {
   name: "Ricardo Oliveira",

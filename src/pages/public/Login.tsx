@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import Input from "@/components/Input";
+import Input from "@/components/OldInput";
 import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, ChevronRight, Dog, Lock, Mail } from "lucide-react";
@@ -61,12 +61,12 @@ const Login: React.FC = () => {
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-tight ml-1">
                   Senha
                 </label>
-                <button
-                  type="button"
+                <Link
+                  to="/forgot-password"
                   className="text-xs font-semibold text-azul-500 hover:text-azul-700 hover:underline cursor-pointer"
                 >
                   Esqueci a senha
-                </button>
+                </Link>
               </div>
               <Input
                 type="password"

@@ -1,3 +1,5 @@
+import { dueDateConstant, paymentMethodConstant } from "@/constants";
+
 export enum PetSpecies {
   DOG = "Cachorro",
   CAT = "Gato",
@@ -5,6 +7,8 @@ export enum PetSpecies {
   REPTILE = "Répteis",
   OTHER = "Outro",
 }
+export type PaymentMethodType = (typeof paymentMethodConstant)[number];
+export type DueDateType = (typeof dueDateConstant)[number];
 
 export interface Pet {
   id: string;
@@ -51,3 +55,5 @@ export interface UserProfile {
   cardLastDigits: string;
   cardBrand: string;
 }
+
+export type DueDateOption = 1 | 5 | 10 | 15 | 20 | 25;
