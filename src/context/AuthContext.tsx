@@ -11,6 +11,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   updateUser: (data: Partial<UserProfile>) => void;
+  setUser: (data: Partial<UserProfile>) => void;
   verifySession: () => Promise<void>;
 }
 
@@ -20,7 +21,7 @@ const STORAGE_KEY = "@PetLife:user";
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Inicialização síncrona: o app sabe na hora se existe um rastro de usuário
-  const [user, setUser] = useState<UserProfile | null>(() => {
+  const [user, _setUser] = useState<UserProfile | null>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : null;
   });
@@ -34,7 +35,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(true);
     try {
       const validatedUser = await api.auth.validateSession(user.email);
-      setUser(validatedUser);
+      _setUser(validatedUser);
       setIsValidated(true);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(validatedUser));
     } catch (error) {
@@ -50,7 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const authUser = { ...MOCK_USER, email };
-      setUser(authUser);
+      _setUser(authUser);
       setIsValidated(true);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
     } finally {
@@ -59,15 +60,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = () => {
-    setUser(null);
+    _setUser(null);
     setIsValidated(false);
     localStorage.removeItem(STORAGE_KEY);
+  };
+
+  const setUser = (data: Partial<UserProfile>) => {
+    if (user) {
+      const updated = { ...user, ...data };
+      _setUser(updated);
+      setIsValidated(true);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    }
   };
 
   const updateUser = (data: Partial<UserProfile>) => {
     if (user) {
       const updated = { ...user, ...data };
-      setUser(updated);
+      _setUser(updated);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     }
   };
@@ -75,10 +85,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: user,
         isAuthenticated: !!user,
         isValidated,
         isLoading,
+        setUser,
         login,
         logout,
         updateUser,

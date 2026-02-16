@@ -1,4 +1,4 @@
-import { Form } from "@/components/form";
+import { Form } from "@/components/DataInput/Form";
 import { dueDateConstant, paymentMethodConstant } from "@/constants";
 import { DueDateType, PaymentMethodType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";

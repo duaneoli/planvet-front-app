@@ -1,7 +1,7 @@
 import { UseBrasilApiService } from "@/api/use/UseBrasilApi";
+import { Form } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
 import { Select } from "@/components/DataInput/Select";
-import { Form } from "@/components/form";
 import { maskCep } from "@/hooks/mask";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, User } from "lucide-react";

@@ -1,5 +1,5 @@
+import { Form } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
-import { Form } from "@/components/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Check, ChevronLeft, Lock, ShieldCheck, X } from "lucide-react";
 import { useForm } from "react-hook-form";

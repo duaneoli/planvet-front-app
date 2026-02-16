@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { Form } from "@/components/form";
+import { Form } from "@/components/DataInput/Form";
 import Input from "@/components/OldInput";
 import { maskCreditCard } from "@/hooks/mask";
 import { PaymentMethodType } from "@/types";

@@ -1,8 +1,8 @@
 import { UseBreedService } from "@/api/use/UseBreed";
 import { UseSpeciesService } from "@/api/use/UseSpecies";
+import { Form } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
 import { Select } from "@/components/DataInput/Select";
-import { Form } from "@/components/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { ArrowRight, Calendar, ChevronLeft, Dog } from "lucide-react";

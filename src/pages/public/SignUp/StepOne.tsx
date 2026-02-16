@@ -1,5 +1,5 @@
+import { Form } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
-import { Form } from "@/components/form";
 import { maskCPF } from "@/hooks/mask";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cpf } from "cpf-cnpj-validator";
