@@ -1,14 +1,13 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard,
-  Dog,
-  ClipboardList,
-  CreditCard,
-  User,
   ChevronLeft,
   ChevronRight,
+  ClipboardList,
+  CreditCard,
+  Dog,
+  LayoutDashboard,
 } from "lucide-react";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -109,14 +108,6 @@ const Sidebar: React.FC<SidebarProps> = ({
               icon={<CreditCard size={20} />}
               label="Financeiro"
               active={location.pathname === "/billing"}
-              collapsed={isCollapsed}
-              onClick={onCloseMobile}
-            />
-            <SidebarItem
-              to="/profile"
-              icon={<User size={20} />}
-              label="Meu Perfil"
-              active={location.pathname === "/profile"}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
             />

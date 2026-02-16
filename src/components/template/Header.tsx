@@ -1,16 +1,16 @@
+import { getInitials } from "@/hooks/functions";
 import { LogOut, Menu, Settings, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 interface HeaderProps {
   onOpenSidebar: () => void;
-  onLogout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onOpenSidebar, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -33,15 +33,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar, onLogout }) => {
     if (path === "/billing") return "Financeiro";
     if (path === "/profile") return "Perfil";
     return "PetLife";
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
   };
 
   return (
@@ -96,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar, onLogout }) => {
             </Link>
             <div className="border-t border-slate-50 mt-1 pt-1">
               <button
-                onClick={onLogout}
+                onClick={logout}
                 className="flex w-full items-center space-x-2 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 transition-colors"
               >
                 <LogOut size={16} />
