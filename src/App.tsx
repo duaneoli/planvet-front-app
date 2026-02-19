@@ -1,6 +1,7 @@
 import { PrivateRouter } from "@/pages/private";
 import PublicRouter from "@/pages/public";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Loader2 } from "lucide-react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
@@ -10,10 +11,11 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
-      gcTime: 1000 * 60 * 30,
-      retry: 0,
+      staleTime: Infinity,
+      gcTime: Infinity,
+      retry: false,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     },
   },
 });
@@ -42,6 +44,7 @@ const App: React.FC = () => {
             <AppRoutes />
           </BrowserRouter>
         </AuthProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );

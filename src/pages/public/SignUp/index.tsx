@@ -37,7 +37,10 @@ const SignUp: React.FC = () => {
     confirmPassword: "Senha@123",
     petName: "Rex",
     petBirthDate: "2018-06-15",
-    paymentMethod: "Boleto",
+    paymentMethod: "BOLETO",
+    dueDate: 1,
+    petBreed: "7",
+    petSpecies: "1",
   });
 
   const onSubmit = async (data: typeof info) => {
@@ -115,7 +118,6 @@ const SignUp: React.FC = () => {
             <StepThree
               defaultValues={info}
               onNext={(data) => {
-                console.log(data);
                 setInfo({ ...info, ...data });
                 setStep(4);
               }}

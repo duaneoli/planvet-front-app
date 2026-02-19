@@ -1,6 +1,7 @@
-import { UseContractService } from "@/api/use/UseContract";
+import { RegisterService } from "@/api/planvet/services/RegisterService";
+import { UseRegisterService } from "@/api/planvet/use/Register";
 import Button from "@/components/Button";
-import { delay } from "@/hooks/functions";
+import { delay, delayWithRace } from "@/hooks/functions";
 import { CheckCircle2, ChevronLeft, CircleX, Dog, FileText, Loader2, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -20,20 +21,21 @@ export function StepFive(props: { data: any; onNext: () => void; onPrevius: () =
     { id: "contract", label: "Gerando contrato e apólice", icon: <FileText size={20} /> },
   ];
 
-  const { mutateAsync } = UseContractService.useCreate();
+  const { mutateAsync } = UseRegisterService.useCreate();
 
-  const handleFinalSubmit = async (formData: any) => {
+  const handleFinalSubmit = async (formData: Parameters<typeof RegisterService.created>[0]) => {
     try {
       const backendPromise = mutateAsync(formData);
 
       setStatus((prev) => ({ ...prev, user: "loading" }));
-      await delay(2000);
+      await delayWithRace(2000, backendPromise);
+
       setStatus((prev) => ({ ...prev, user: "success", pet: "loading" }));
 
-      await delay(2000);
+      await delayWithRace(2000, backendPromise);
       setStatus((prev) => ({ ...prev, pet: "success", contract: "loading" }));
 
-      await delay(2000);
+      await delayWithRace(2000, backendPromise);
       await backendPromise;
       setStatus((prev) => ({ ...prev, contract: "success" }));
       toast.success("Contrato criado com sucesso!", { id: "main-action-toast" });
@@ -48,7 +50,19 @@ export function StepFive(props: { data: any; onNext: () => void; onPrevius: () =
   };
 
   useEffect(() => {
-    handleFinalSubmit({});
+    handleFinalSubmit({
+      email: props.data.email,
+      cpf: props.data.cpf,
+      fullName: props.data.fullName,
+      password: props.data.password,
+      petName: props.data.petName,
+      petBirthDate: props.data.petBirthDate,
+      petSpecies: Number(props.data.petSpecies),
+      petBreed: Number(props.data.petBreed),
+      paymentMethod: props.data.paymentMethod,
+      dueDate: Number(props.data.dueDate),
+      planId: 47,
+    });
   }, []);
 
   return (

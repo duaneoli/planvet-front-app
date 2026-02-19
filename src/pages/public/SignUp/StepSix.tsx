@@ -1,4 +1,4 @@
-import { UseBrasilApiService } from "@/api/use/UseBrasilApi";
+import { UseBrasilApiService } from "@/api/brasil-api/use/UseBrasilApi";
 import { Form } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
 import { Select } from "@/components/DataInput/Select";
@@ -80,8 +80,6 @@ export function StepSix(props: {
       setAllowedManualEdit(true);
     }
   }, [isError]);
-
-  console.log(formData);
 
   return (
     <Form

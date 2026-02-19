@@ -1,4 +1,4 @@
-import { BrasilApiService, EstadoType } from "@/api/services/BrasilApiService";
+import { BrasilApiService, EstadoType } from "@/api/brasil-api/services/BrasilApiService";
 import { useQuery } from "@tanstack/react-query";
 
 export class UseBrasilApiService {

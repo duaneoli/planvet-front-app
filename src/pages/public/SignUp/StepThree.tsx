@@ -1,12 +1,11 @@
-import { UseBreedService } from "@/api/use/UseBreed";
-import { UseSpeciesService } from "@/api/use/UseSpecies";
+import { UseBreedService } from "@/api/planvet/use/UseBreed";
+import { UseSpeciesService } from "@/api/planvet/use/UseSpecies";
 import { Form } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
 import { Select } from "@/components/DataInput/Select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { ArrowRight, Calendar, ChevronLeft, Dog } from "lucide-react";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -50,20 +49,13 @@ export function StepThree(props: {
   });
 
   const formData = watch();
-  console.log(formData);
 
   const { data: speciesServiceData, isLoading: speciesServiceLoading } =
     UseSpeciesService.useGetAll();
 
-  const {
-    data: breedServiceData,
-    isLoading: breedServiceLoading,
-    refetch,
-  } = UseBreedService.useGetBySpecie(Number(formData.petSpecies));
-
-  useEffect(() => {
-    refetch();
-  }, [formData.petSpecies]);
+  const { data: breedServiceData, isLoading: breedServiceLoading } = UseBreedService.useGetBySpecie(
+    Number(formData.petSpecies)
+  );
 
   return (
     <Form
@@ -110,9 +102,9 @@ export function StepThree(props: {
             disabled={speciesServiceLoading}
             options={
               speciesServiceData
-                ? speciesServiceData.map(({ id, specie }) => ({
+                ? speciesServiceData.map(({ id, name }) => ({
                     value: id,
-                    label: specie,
+                    label: name,
                   }))
                 : [{ label: "Carregando...", value: "" }]
             }
@@ -125,9 +117,9 @@ export function StepThree(props: {
             disabled={breedServiceLoading}
             options={
               breedServiceData
-                ? breedServiceData.map(({ breed, id }) => ({
+                ? breedServiceData.map(({ name, id }) => ({
                     value: id,
-                    label: breed,
+                    label: name,
                   }))
                 : [{ label: "Carregando...", value: "" }]
             }
