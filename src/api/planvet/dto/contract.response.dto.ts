@@ -1,10 +1,22 @@
+export type ContractStatus =
+  | "ENROLLMENT"
+  | "ACTIVE"
+  | "CANCELLED"
+  | "CANCELLED_OPEN"
+  | "CANCELLED_ENROLLMENT"
+  | "CANCELLED_DEFAULTED"
+  | "CANCELLED_PAID"
+  | "CANCELLED_DEATH"
+  | "CANCELLED_NO_COST"
+  | "IN_NEGOTIATION";
+
 export type ContractMinifyResponseDTO = {
   id: number;
   contractNumber: number;
   userId: number;
   animalId: number;
-  paymentMethod: string;
-  status: string;
+  paymentMethod: "CARD" | "BOLETO" | "PIX";
+  status: ContractStatus;
   statusDetail: string;
   renewal: number;
   startDate: string;
