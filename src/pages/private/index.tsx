@@ -1,9 +1,9 @@
 import { Layout } from "@/components/template/layout";
 import Billing from "@/pages/Billing";
-import Contracts from "@/pages/Contracts";
 import Dashboard from "@/pages/Dashboard";
 import Pets from "@/pages/Pets";
 import PetSocial from "@/pages/PetSocial";
+import Contracts from "@/pages/private/Contracts";
 import Profile from "@/pages/Profile";
 import { Navigate, Route, Routes } from "react-router-dom";
 

@@ -4,6 +4,7 @@ class PlanvetClient {
   static client = (() => {
     const api = axios.create({
       baseURL: "http://localhost:5000",
+      withCredentials: true,
     });
 
     return api;
@@ -29,6 +30,14 @@ const PlanvetRouters = {
         list: (id: number) => `/animals/species/${id}/breeds`,
       },
     },
+  },
+  contracts: {
+    user: {
+      getAll: "/user/contracts",
+    },
+  },
+  auth: {
+    login: "/auth/login",
   },
 };
 

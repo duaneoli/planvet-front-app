@@ -1,15 +1,18 @@
 import { ContractService } from "@/api/planvet/services/ContractService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export class UseContractService {
+class UseByUser {
   static useGetAll() {
     return useQuery({
       queryKey: ["contracts"],
-      queryFn: ContractService.getAll,
+      queryFn: ContractService.user.getAll,
       staleTime: Infinity,
     });
   }
+}
 
+export class UseContractService {
+  static user = UseByUser;
   static useCreate() {
     const queryClient = useQueryClient();
     return useMutation({

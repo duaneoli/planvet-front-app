@@ -1,3 +1,4 @@
+import { AuthService } from "@/api/planvet/services/AuthService";
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { api } from "../api";
 import { MOCK_USER } from "../constants";
@@ -49,7 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await AuthService.login(email, password);
       const authUser = { ...MOCK_USER, email };
       _setUser(authUser);
       setIsValidated(true);
