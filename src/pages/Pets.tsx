@@ -2,7 +2,7 @@ import Modal from "@/components/modal/Modal";
 import { Loader2, Plus, Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import Button from "../components/Button";
-import Input from "../components/Input";
+import Input from "../components/OldInput";
 import Pagination from "../components/Pagination";
 import PetCard from "../components/PetCard";
 import { useAddPet, useDeletePet, usePets } from "../hooks/usePets";

@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import Input from "@/components/Input";
+import Input from "@/components/OldInput";
 import Modal from "@/components/modal/Modal";
 import { UserProfile } from "@/types";
 import { CreditCard, Lock, ShieldCheck } from "lucide-react";
