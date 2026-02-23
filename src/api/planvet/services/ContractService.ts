@@ -1,16 +1,14 @@
 import { PlanvetApi } from "@/api/planvet";
-import { AnimalMinifyResponseDTO } from "@/api/planvet/dto/animal.response.dto";
-import { ContractMinifyResponseDTO } from "@/api/planvet/dto/contract.response.dto";
-import { PlanMinifyrResponseDTO } from "@/api/planvet/dto/plan.response.dto";
+import { AnimalResponseDTO } from "@/api/planvet/dto/response/AnimalResponseDTO";
+import { ContractResponseDTO } from "@/api/planvet/dto/response/ContractResponseDTO";
+import { PlanResponseDTO } from "@/api/planvet/dto/response/planResponseDTO";
 import { DueDateType, PaymentMethodType } from "@/types";
 
 class UserContractService extends PlanvetApi {
   static async getAll(): Promise<
-    Array<
-      ContractMinifyResponseDTO & { plan: PlanMinifyrResponseDTO; animal: AnimalMinifyResponseDTO }
-    >
+    Array<ContractResponseDTO & { plan: PlanResponseDTO; animal: AnimalResponseDTO }>
   > {
-    const response = await PlanvetApi.client.get(PlanvetApi.router.contracts.user.getAll);
+    const response = await PlanvetApi.client.get(PlanvetApi.router.users.contracts.getAll);
     return response.data;
   }
 }

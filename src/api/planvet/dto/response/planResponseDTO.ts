@@ -1,0 +1,21 @@
+export type PlanResponseDTO = {
+  id: number;
+  name: string;
+  groupName: string | null;
+  description: string;
+  price: string;
+  cost: string;
+  minAge: number | null;
+  maxAge: number;
+  agePct: string;
+  lateFee: string;
+  penalty: string;
+  migrationFee: string;
+  cancellationPenaltyPct: string;
+  igpm: string;
+  annualDiscountPct: string;
+  semiannualDiscountPct: string;
+  quarterlyDiscountPct: string;
+  monthlyDiscountPct: string;
+  timestamp: Date;
+};

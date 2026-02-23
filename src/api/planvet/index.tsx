@@ -1,10 +1,16 @@
 import axios from "axios";
+import qs from "qs";
 
 class PlanvetClient {
   static client = (() => {
     const api = axios.create({
       baseURL: "http://localhost:5000",
       withCredentials: true,
+      paramsSerializer: {
+        serialize: (params) => {
+          return qs.stringify(params, { arrayFormat: "repeat", skipNulls: true });
+        },
+      },
     });
 
     return api;
@@ -22,6 +28,12 @@ const PlanvetRouters = {
       get: "/users/me",
       update: "/users/me/update",
     },
+    invoices: {
+      list: "/user/invoices",
+    },
+    contracts: {
+      getAll: "/user/contracts",
+    },
   },
   animals: {
     species: {
@@ -29,11 +41,6 @@ const PlanvetRouters = {
       breeds: {
         list: (id: number) => `/animals/species/${id}/breeds`,
       },
-    },
-  },
-  contracts: {
-    user: {
-      getAll: "/user/contracts",
     },
   },
   auth: {

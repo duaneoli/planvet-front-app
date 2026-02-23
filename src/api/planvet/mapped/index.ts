@@ -1,4 +1,4 @@
-import { ContractStatus } from "@/api/planvet/dto/contract.response.dto";
+import { ContractStatusType } from "@/api/planvet/dto/response/ContractResponseDTO";
 
 export const animalPhotoMapped = (photo: string) => photo || "/image.png";
 
@@ -9,7 +9,7 @@ export const paymentMethodMapped = (method: "CARD" | "BOLETO" | "PIX") => {
   return "Error";
 };
 
-export const contractStatusMapped = (status: ContractStatus) => {
+export const contractStatusMapped = (status: ContractStatusType) => {
   if (status === "ENROLLMENT") return "Matrícula";
   if (status === "ACTIVE") return "Ativo";
   if (status === "CANCELLED") return "Cancelado";
@@ -22,7 +22,7 @@ export const contractStatusMapped = (status: ContractStatus) => {
   return "Error";
 };
 
-export const contractBadgeMapped = (status: ContractStatus) => {
+export const contractBadgeMapped = (status: ContractStatusType) => {
   if (status === "ENROLLMENT") return "badge-success";
   if (status === "ACTIVE") return "badge-success";
   if (status === "CANCELLED") return "badge-danger";
