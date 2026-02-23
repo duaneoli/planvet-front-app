@@ -1,11 +1,4 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  ClipboardList,
-  CreditCard,
-  Dog,
-  LayoutDashboard,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, CreditCard } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -29,12 +22,12 @@ const SidebarItem: React.FC<{
     onClick={onClick}
     className={`flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group ${
       active
-        ? "bg-emerald-600 text-white shadow-lg shadow-emerald-200"
-        : "text-slate-600 hover:bg-emerald-50 hover:text-emerald-600"
+        ? "bg-azul-600 text-white shadow-lg shadow-azul-200"
+        : "text-slate-600 hover:bg-azul-50 hover:text-azul-600"
     } ${collapsed ? "justify-center space-x-0" : ""}`}
     title={collapsed ? label : ""}
   >
-    <div className={`${active ? "text-white" : "text-slate-500 group-hover:text-emerald-600"}`}>
+    <div className={`${active ? "text-white" : "text-slate-500 group-hover:text-azul-600"}`}>
       {icon}
     </div>
     {!collapsed && <span className="font-medium whitespace-nowrap overflow-hidden">{label}</span>}
@@ -70,39 +63,39 @@ const Sidebar: React.FC<SidebarProps> = ({
           <div
             className={`flex items-center mb-8 transition-all ${isCollapsed ? "justify-center" : "px-2 space-x-2"}`}
           >
-            <div className="bg-emerald-600 p-2 rounded-xl text-white shadow-md">
-              <Dog size={24} />
+            <div className="p-2 rounded-xl text-white ">
+              <img src={"planvet-logo.png"} className="w-6 h-6" />
             </div>
             {!isCollapsed && (
-              <h1 className="text-xl font-bold tracking-tight text-slate-800">PetLife</h1>
+              <h1 className="text-xl font-bold tracking-tight text-slate-800">PlanVET</h1>
             )}
           </div>
 
           <nav className="flex-1 space-y-2">
-            <SidebarItem
+            {/* <SidebarItem
               to="/"
               icon={<LayoutDashboard size={20} />}
               label="Dashboard"
               active={location.pathname === "/"}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
-            />
-            <SidebarItem
+            /> */}
+            {/* <SidebarItem
               to="/pets"
               icon={<Dog size={20} />}
               label="Meus Pets"
               active={location.pathname.startsWith("/pets")}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
-            />
-            <SidebarItem
+            /> */}
+            {/* <SidebarItem
               to="/contracts"
               icon={<ClipboardList size={20} />}
               label="Contratos"
               active={location.pathname === "/contracts"}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
-            />
+            /> */}
             <SidebarItem
               to="/billing"
               icon={<CreditCard size={20} />}
