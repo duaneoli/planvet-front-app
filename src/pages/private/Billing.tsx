@@ -1,6 +1,7 @@
 import { UserInvoiceGetAllRequest } from "@/api/planvet/dto/request/UserInvoiceGetAllRequest";
 import { UseInvoiceService } from "@/api/planvet/use/UseInvoice";
 import { InvoiceCard } from "@/components/Card/InvoiceCard";
+import Pagination from "@/components/Pagination";
 import { Main } from "@/components/template/main";
 import { Query } from "@/lib/Query";
 import { Clock, CreditCard, Loader2, Settings } from "lucide-react";
@@ -10,17 +11,19 @@ import PaymentModal from "../../components/modal/PaymentModal";
 import { MOCK_USER } from "../../constants";
 import { UserProfile } from "../../types";
 
-const queryHistory: UserInvoiceGetAllRequest = Query.paramsToQuery({
-  pageSize: 10,
-  sortBy: { originalDate: "DESC" },
-  filters: { status: ["pg", "ca"] },
-});
-
 const Billing: React.FC = () => {
   const [user, setUser] = useState<UserProfile>(MOCK_USER);
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isCreditCardModalOpen, setIsCreditCardModalOpen] = useState(false);
+  const [queryHistory, setQueryHistory] = useState<UserInvoiceGetAllRequest>(
+    Query.paramsToQuery({
+      pageSize: 10,
+      page: 1,
+      sortBy: { originalDate: "DESC" },
+      filters: { status: ["pg", "ca"] },
+    })
+  );
 
   const { data: invoicesAb, isLoading: loadingInvoices } = UseInvoiceService.user.getAll(
     Query.paramsToQuery({
@@ -77,17 +80,26 @@ const Billing: React.FC = () => {
           ))}
         </div>
         <h2>Histórico</h2>
+        {/* <div className="filter">
+          <input className="btn filter-reset" type="radio" name="frameworks" aria-label="All" />
+          <input className="btn" type="checkbox" name="frameworks" aria-label="Sveltekit" />
+          <input className="btn" type="checkbox" name="frameworks" aria-label="Nuxt" />
+          <input className="btn" type="checkbox" name="frameworks" aria-label="Next.js" />
+        </div> */}
         <div className="flex flex-col gap-4">
           {invoicesHistory?.data.map((inv) => (
             <InvoiceCard invoice={inv} />
           ))}
         </div>
-
-        {/* <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        /> */}
+        <Pagination
+          currentPage={queryHistory.page as number}
+          totalPages={invoicesHistory?.totalPages || 1}
+          totalElements={invoicesHistory?.totalElements || 0}
+          onPageChange={(page: number) => {
+            queryHistory.page = page;
+            setQueryHistory(queryHistory);
+          }}
+        />
       </div>
 
       <PaymentModal

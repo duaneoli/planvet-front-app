@@ -1,6 +1,6 @@
 import { ContractStatusType } from "@/api/planvet/dto/response/ContractResponseDTO";
 
-export const animalPhotoMapped = (photo: string) => photo || "/image.png";
+export const animalPhotoMapped = (photo: string) => photo || "/default-animal.png";
 
 export const paymentMethodMapped = (method: "CARD" | "BOLETO" | "PIX") => {
   if (method === "CARD") return "Cartão";
