@@ -1,4 +1,4 @@
-import { ContractResponseDTO } from "@/api/planvet/dto/ContractResponseDTO";
+import { ContractResponseDTO } from "@/api/planvet/dto/response/ContractResponseDTO";
 import { PaymentMethodType } from "@/types";
 
 export type InvoiceResponseDTO = {
@@ -21,8 +21,23 @@ export type InvoiceResponseDTO = {
   interest: string;
   amount: string;
   description: string;
-  status: string;
+  status: "pg" | "ab" | "ca";
   settlementNote: string;
   timestamp: Date;
   contract?: ContractResponseDTO;
+};
+
+export const InvoiceResponseMapped = {
+  status: (status: "pg" | "ab" | "ca") => {
+    if (status === "pg") return "Pago";
+    if (status === "ab") return "Pendente";
+    if (status === "ca") return "Cancelado";
+    return "Error";
+  },
+  statusBadge: (status: "pg" | "ab" | "ca") => {
+    if (status === "pg") return "success";
+    if (status === "ab") return "warning";
+    if (status === "ca") return "info";
+    return undefined;
+  },
 };

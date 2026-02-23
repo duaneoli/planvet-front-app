@@ -1,4 +1,7 @@
-import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDTO";
+import {
+  InvoiceResponseDTO,
+  InvoiceResponseMapped,
+} from "@/api/planvet/dto/response/InvoiceResponseDTO";
 import { animalPhotoMapped } from "@/api/planvet/mapped";
 import Badge from "@/components/Badge";
 import Button from "@/components/Button";
@@ -31,15 +34,15 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
         <div className="md:hidden">
           <Badge
             variant={
-              props.invoice.status === "Pago"
+              props.invoice.status === "pg"
                 ? "success"
-                : props.invoice.status === "Pendente"
+                : props.invoice.status === "ca"
                   ? "warning"
                   : "danger"
             }
-            pulse={props.invoice.status !== "Pago"}
+            pulse={props.invoice.status !== "pg"}
           >
-            {props.invoice.status}
+            {InvoiceResponseMapped.status(props.invoice.status)}
           </Badge>
         </div>
       </div>
@@ -68,16 +71,10 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
             Status
           </p>
           <Badge
-            variant={
-              props.invoice.status === "Pago"
-                ? "success"
-                : props.invoice.status === "Pendente"
-                  ? "warning"
-                  : "danger"
-            }
-            pulse={props.invoice.status !== "Pago"}
+            variant={InvoiceResponseMapped.statusBadge(props.invoice.status)}
+            pulse={props.invoice.status !== "pg"}
           >
-            {props.invoice.status}
+            {InvoiceResponseMapped.status(props.invoice.status)}
           </Badge>
         </div>
       </div>
@@ -95,18 +92,18 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
         </div>
 
         <div className="flex items-center gap-2">
-          {props.invoice.status !== "Pago" ? (
+          {props.invoice.status !== "pg" ? (
             <Button
               variant="primary"
               size="sm"
-              className="h-10 px-5 rounded-2xl text-xs font-bold shadow-lg shadow-emerald-100"
+              className="h-10 px-5 rounded-2xl text-xs font-bold shadow-lg shadow-azul-100"
               //   onClick={() => handleOpenPayment(inv)}
             >
               Pagar
             </Button>
           ) : (
             <button
-              className="p-2.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-2xl transition-all"
+              className="p-2.5 text-slate-400 hover:text-azul-600 hover:bg-azul-50 rounded-2xl transition-all"
               title="Ver Comprovante"
             >
               <Download size={20} />
