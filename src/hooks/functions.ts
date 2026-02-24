@@ -12,3 +12,12 @@ export const getInitials = (name: string) => {
     .join("")
     .toUpperCase();
 };
+
+export const getNameAndSubname = (name: string) => {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n.toLowerCase())
+    .map((n) => n.charAt(0).toUpperCase() + n.slice(1))
+    .join(" ");
+};

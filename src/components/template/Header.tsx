@@ -1,4 +1,4 @@
-import { getInitials } from "@/hooks/functions";
+import { getInitials, getNameAndSubname } from "@/hooks/functions";
 import { LogOut, Menu, Settings, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
     if (path === "/contracts") return "Contratos de Plano";
     if (path === "/billing") return "Financeiro";
     if (path === "/profile") return "Perfil";
-    return "PetLife";
+    return "PlanVet";
   };
 
   return (
@@ -54,19 +54,21 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
         >
           <div className="hidden sm:block text-right pr-2 border-r border-slate-200">
             <p className="text-xs font-bold text-slate-800 leading-tight">
-              {user?.name || "Usuário"}
+              {getNameAndSubname(user?.displayName || "Usuário")}
             </p>
             <p className="text-[10px] text-emerald-600 font-medium leading-tight">Plano Ativo</p>
           </div>
           <div className="w-10 h-10 rounded-full bg-emerald-100 border-2 border-white ring-1 ring-emerald-200 flex items-center justify-center text-emerald-700 font-bold shadow-sm">
-            {user ? getInitials(user.name) : "??"}
+            {user ? getInitials(user.displayName) : "??"}
           </div>
         </button>
 
         {isMenuOpen && (
           <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
             <div className="px-4 py-3 border-b border-slate-50 mb-1">
-              <p className="text-sm font-bold text-slate-800">{user?.name}</p>
+              <p className="text-sm font-bold text-slate-800">
+                {getNameAndSubname(user?.displayName || "Usuário")}
+              </p>
               <p className="text-xs text-slate-500">{user?.email}</p>
             </div>
             <Link

@@ -29,6 +29,9 @@ const Login: React.FC = () => {
   const onSubmit = async (data: LoginForm) => {
     try {
       await login(data.email, data.password);
+      // se tiver redirect redireciona (futuro)
+
+      window.location.replace("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       alert("Credenciais inválidas ou erro no servidor.");

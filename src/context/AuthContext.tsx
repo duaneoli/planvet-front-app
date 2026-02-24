@@ -1,11 +1,11 @@
+import { LoginResponseDTO } from "@/api/planvet/dto/response/LoginResponseDTO";
 import { AuthService } from "@/api/planvet/services/AuthService";
+import { LocalStorage } from "@/hooks/LocalStorage";
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { api } from "../api";
-import { MOCK_USER } from "../constants";
 import { UserProfile } from "../types";
 
 interface AuthContextType {
-  user: UserProfile | null;
+  user: LoginResponseDTO | null;
   isAuthenticated: boolean;
   isValidated: boolean;
   isLoading: boolean;
@@ -22,23 +22,24 @@ const STORAGE_KEY = "@PetLife:user";
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Inicialização síncrona: o app sabe na hora se existe um rastro de usuário
-  const [user, _setUser] = useState<UserProfile | null>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [user, _setUser] = useState<LoginResponseDTO | null>(null);
 
   const [isValidated, setIsValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const verifySession = async () => {
-    if (!user || isValidated) return;
+    if (user || isValidated) return;
+
+    if (!LocalStorage.get("LOGGED_IN")) {
+      setIsValidated(true);
+      return;
+    }
 
     setIsLoading(true);
     try {
-      const validatedUser = await api.auth.validateSession(user.email);
+      const validatedUser = await AuthService.me();
       _setUser(validatedUser);
       setIsValidated(true);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(validatedUser));
     } catch (error) {
       console.error("Sessão inválida no servidor:", error);
       logout();
@@ -50,11 +51,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      await AuthService.login(email, password);
-      const authUser = { ...MOCK_USER, email };
-      _setUser(authUser);
+      const validatedUser = await AuthService.login(email, password);
+      _setUser(validatedUser);
       setIsValidated(true);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
+      LocalStorage.set("LOGGED_IN", true);
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     _setUser(null);
     setIsValidated(false);
-    localStorage.removeItem(STORAGE_KEY);
+    LocalStorage.remove("LOGGED_IN");
   };
 
   const setUser = (data: Partial<UserProfile>) => {

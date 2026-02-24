@@ -13,6 +13,21 @@ class PlanvetClient {
       },
     });
 
+    api.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error.response?.status === 401) {
+          try {
+            await api.post("/auth/refresh"); // O back lê o refresh_token do cookie
+            return api(error.config); // Tenta a requisição original de novo
+          } catch (refreshError) {
+            window.location.href = "/login";
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+
     return api;
   })();
 }
@@ -45,6 +60,8 @@ const PlanvetRouters = {
   },
   auth: {
     login: "/auth/login",
+    refresh: "/auth/refresh",
+    me: "/auth/me",
   },
 };
 

@@ -97,10 +97,10 @@ const Sidebar: React.FC<SidebarProps> = ({
               onClick={onCloseMobile}
             /> */}
             <SidebarItem
-              to="/billing"
+              to="/invoices"
               icon={<CreditCard size={20} />}
               label="Financeiro"
-              active={location.pathname === "/billing"}
+              active={location.pathname === "/invoices"}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
             />

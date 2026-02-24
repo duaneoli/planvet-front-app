@@ -1,8 +1,9 @@
 import Header from "@/components/template/Header";
 import Sidebar from "@/components/template/Sidebar";
 import { useState } from "react";
+import { Outlet } from "react-router-dom";
 
-export function Layout(props: { children: React.ReactNode }) {
+export function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -17,7 +18,9 @@ export function Layout(props: { children: React.ReactNode }) {
 
       <main className="flex-1 overflow-y-auto relative">
         <Header onOpenSidebar={() => setIsSidebarOpen(true)} />
-        <div className="max-w-6xl mx-auto p-4 lg:p-8">{props.children}</div>
+        <div className="max-w-6xl mx-auto p-4 lg:p-8">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
