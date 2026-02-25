@@ -4,18 +4,10 @@ import { InvoiceCard } from "@/components/Card/InvoiceCard";
 import Pagination from "@/components/Pagination";
 import { Main } from "@/components/template/main";
 import { Query } from "@/lib/Query";
-import { Clock, CreditCard, Loader2, Settings } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
-import CreditCardModal from "../../components/modal/CreditCardModal";
-import PaymentModal from "../../components/modal/PaymentModal";
-import { MOCK_USER } from "../../constants";
-import { UserProfile } from "../../types";
 
 const Billing: React.FC = () => {
-  const [user, setUser] = useState<UserProfile>(MOCK_USER);
-  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [isCreditCardModalOpen, setIsCreditCardModalOpen] = useState(false);
   const [queryHistory, setQueryHistory] = useState<UserInvoiceGetAllRequest>(
     Query.paramsToQuery({
       pageSize: 10,
@@ -33,17 +25,11 @@ const Billing: React.FC = () => {
     })
   );
 
-  const { data: invoicesHistory, isLoading: invoicesHistoryLoading } =
-    UseInvoiceService.user.getAll(queryHistory);
-
-  const handleOpenPayment = (invoice: any) => {
-    setSelectedInvoice(invoice);
-    setIsPaymentModalOpen(true);
-  };
-
-  const handleUpdateUser = (updatedUser: UserProfile) => {
-    setUser(updatedUser);
-  };
+  const {
+    data: invoicesHistory,
+    isLoading: invoicesHistoryLoading,
+    refetch,
+  } = UseInvoiceService.user.getAll(queryHistory);
 
   if (loadingInvoices) {
     return (
@@ -76,19 +62,13 @@ const Billing: React.FC = () => {
         </div> */}
         <div className="flex flex-col gap-4">
           {invoicesAb?.data.map((inv) => (
-            <InvoiceCard invoice={inv} />
+            <InvoiceCard invoice={inv} key={`invoice-ab-${inv.id}`} />
           ))}
         </div>
         <h2>Histórico</h2>
-        {/* <div className="filter">
-          <input className="btn filter-reset" type="radio" name="frameworks" aria-label="All" />
-          <input className="btn" type="checkbox" name="frameworks" aria-label="Sveltekit" />
-          <input className="btn" type="checkbox" name="frameworks" aria-label="Nuxt" />
-          <input className="btn" type="checkbox" name="frameworks" aria-label="Next.js" />
-        </div> */}
         <div className="flex flex-col gap-4">
           {invoicesHistory?.data.map((inv) => (
-            <InvoiceCard invoice={inv} />
+            <InvoiceCard invoice={inv} key={`invoice-pg-${inv.id}`} />
           ))}
         </div>
         <Pagination
@@ -98,23 +78,12 @@ const Billing: React.FC = () => {
           onPageChange={(page: number) => {
             queryHistory.page = page;
             setQueryHistory(queryHistory);
+            refetch();
           }}
         />
       </div>
 
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        invoice={selectedInvoice}
-      />
-
-      <CreditCardModal
-        isOpen={isCreditCardModalOpen}
-        onClose={() => setIsCreditCardModalOpen(false)}
-        user={user}
-        onSave={handleUpdateUser}
-      />
-      {/* Left Column: Alerts & Quick Info */}
+      {/* Left Column: Alerts & Quick Info
       <div className="lg:w-1/4 space-y-6">
         <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-6 shadow-sm">
           <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wider">
@@ -153,7 +122,7 @@ const Billing: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </Main>
   );
 };

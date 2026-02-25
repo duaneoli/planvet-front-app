@@ -7,7 +7,7 @@ import { Navigate, Route } from "react-router-dom";
 export function PrivateRouter() {
   return (
     <React.Fragment>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<RouteGuard element={<Layout />} />}>
         <Route index element={<Navigate to="/invoices" />} />
 
         <Route path="/invoices" element={<RouteGuard element={<Billing />} />} />

@@ -40,8 +40,8 @@ const PlanvetRouters = {
     created: "/users",
     update: (id: number) => `/users/${id}`,
     me: {
-      get: "/users/me",
-      update: "/users/me/update",
+      get: "/user/me",
+      update: "/user/me",
     },
     invoices: {
       list: "/user/invoices",
@@ -62,6 +62,16 @@ const PlanvetRouters = {
     login: "/auth/login",
     refresh: "/auth/refresh",
     me: "/auth/me",
+  },
+  payments: {
+    invoice: {
+      id: (invoiceId: number) => ({
+        charge: {
+          create: `/payments/invoice/${invoiceId}/charge`,
+          get: `/payments/invoice/${invoiceId}/charge`,
+        },
+      }),
+    },
   },
 };
 

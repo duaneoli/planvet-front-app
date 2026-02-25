@@ -13,6 +13,6 @@ class UserInvoiceService extends PlanvetApi {
   }
 }
 
-export class InvoiceService extends PlanvetApi {
+export class InvoiceService {
   static user = UserInvoiceService;
 }

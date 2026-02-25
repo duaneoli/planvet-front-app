@@ -8,6 +8,7 @@ class UseByUser {
       queryKey: ["invoices", query.toString()],
       queryFn: () => InvoiceService.user.getAll(query),
       staleTime: 1000 * 60 * 5,
+      placeholderData: (previus) => previus,
     });
   }
 }

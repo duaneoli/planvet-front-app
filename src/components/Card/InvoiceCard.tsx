@@ -5,9 +5,13 @@ import {
 import { animalPhotoMapped } from "@/api/planvet/mapped";
 import Badge from "@/components/Badge";
 import Button from "@/components/Button";
+import PaymentModal from "@/components/modal/PaymentModal";
 import { Clock, Download, Eye } from "lucide-react";
+import { useState } from "react";
 
 export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
   return (
     <div
       key={props.invoice.id}
@@ -97,7 +101,7 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
               variant="primary"
               size="sm"
               className="h-10 px-5 rounded-2xl text-xs font-bold shadow-lg shadow-azul-100"
-              //   onClick={() => handleOpenPayment(inv)}
+              onClick={() => setIsPaymentModalOpen(true)}
             >
               Pagar
             </Button>
@@ -117,6 +121,11 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
           </button>
         </div>
       </div>
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        invoice={props.invoice}
+      />
     </div>
   );
 }
