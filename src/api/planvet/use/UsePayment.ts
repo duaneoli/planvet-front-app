@@ -10,11 +10,11 @@ class UseByUser {
     return useMutation({
       mutationFn: ({
         invoiceId,
-        paymentMethod,
+        data,
       }: {
         invoiceId: number;
-        paymentMethod: PaymentMethodType;
-      }) => PaymentService.user.createCharge(invoiceId, paymentMethod),
+        data: { paymentMethod: PaymentMethodType };
+      }) => PaymentService.user.createCharge(invoiceId, data),
       onSuccess: (data, variables) => {
         queryClient.setQueryData(["invoice", variables.invoiceId], data);
       },

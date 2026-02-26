@@ -3,10 +3,10 @@ import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDT
 import { PaymentMethodType } from "@/types";
 
 class UserPaymentService extends PlanvetApi {
-  static async createCharge(invoiceId: number, paymentMethod: PaymentMethodType) {
+  static async createCharge(invoiceId: number, data: { paymentMethod: PaymentMethodType }) {
     const response = await PlanvetApi.client.post<InvoiceResponseDTO>(
       PlanvetApi.router.payments.invoice.id(invoiceId).charge.create,
-      { paymentMethod }
+      data
     );
     return response;
   }
