@@ -1,19 +1,18 @@
+import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDTO";
+import { UsePaymentService } from "@/api/planvet/use/UsePayment";
 import { Form } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
 import { maskCreditCard } from "@/hooks/mask";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, CreditCard, Lock, ShieldCheck } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import Cards from "react-credit-cards-2";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 type PaymentByCardProps = {
-  cardNumber: string;
-  expiry: string;
-  cvv: string;
-  name: string;
-  inFocus: "number" | "name" | "expiry" | "cvc" | undefined;
+  show?: boolean;
+  invoice: InvoiceResponseDTO;
 };
 
 const signUpSchema = z.object({
@@ -30,6 +29,7 @@ export function PaymentByCard(props: PaymentByCardProps) {
   const [inFocus, setInFocus] = useState<"number" | "name" | "expiry" | "cvc" | undefined>(
     undefined
   );
+
   const {
     watch,
     handleSubmit,
@@ -50,38 +50,39 @@ export function PaymentByCard(props: PaymentByCardProps) {
 
   let formData = watch();
 
-  const handlePayment = () => {};
+  const { mutate, isPending } = UsePaymentService.user.createCharge();
+  const handlePayment = async (data: SignUpForm) => {
+    try {
+      mutate({ invoiceId: props.invoice.id, data: { paymentMethod: props.invoice.paymentMethod } });
+    } catch (error) {}
+  };
 
-  const cardNumber = props.cardNumber?.replaceAll(" ", "").replaceAll("^[0-9]", "");
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 max-w-[500px]">
       <Cards
-        number={cardNumber}
-        expiry={props.expiry}
-        cvc={props.cvv}
-        name={props.name}
-        focused={props.inFocus}
+        number={formData.cardNumber}
+        expiry={formData.expiry}
+        cvc={formData.cvv}
+        name={formData.name}
+        focused={inFocus}
       />
-      <div className="bg-blue-50 p-6 rounded-2xl text-center border border-blue-100 ">
-        <p className="text-sm text-blue-700 font-medium">
-          Esta fatura será cobrada automaticamente no seu cartão final{" "}
-          <strong>{cardNumber.length == 16 ? cardNumber.slice(-4) : "****"}</strong> no dia do
-          vencimento.
-        </p>
-      </div>
+      {props.show && (
+        <div className="bg-blue-50 p-6 rounded-2xl text-center border border-blue-100 ">
+          <p className="text-sm text-blue-700 font-medium">
+            Esta fatura será cobrada automaticamente no seu cartão final{" "}
+            <strong>
+              {formData.cardNumber.length == 16 ? formData.cardNumber.slice(-4) : "****"}
+            </strong>{" "}
+            no dia do vencimento.
+          </p>
+        </div>
+      )}
       <Form
         handleSubmit={handleSubmit(handlePayment)}
-        leftButton={{
-          text: "Voltar",
-          iconLeft: <ChevronLeft size={20} />,
-          onClick: () => {},
-          isLoading: false,
-        }}
         rigthButton={{
-          text: "Ativar proteção",
-          iconLeft: <ShieldCheck size={20} />,
-          iconRight: <ShieldCheck size={20} />,
+          text: "Pagar",
           isLoading: false,
+          disabled: isPending,
         }}
       >
         <div className="space-y-4">

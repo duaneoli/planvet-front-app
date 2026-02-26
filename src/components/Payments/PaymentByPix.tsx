@@ -3,7 +3,7 @@ import { UsePaymentService } from "@/api/planvet/use/UsePayment";
 import { Loader } from "@/components/Loader";
 import dayjs from "dayjs";
 import { Check, Copy } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 
 type PaymentByPixProps = {
   invoice: InvoiceResponseDTO;
@@ -19,6 +19,15 @@ export function PaymentByPix(props: PaymentByPixProps) {
   };
 
   const { data, isLoading } = UsePaymentService.user.getCharge(props.invoice.id);
+  const { mutate, isPending } = UsePaymentService.user.createCharge();
+
+  useEffect(() => {
+    if (!props.invoice) return;
+    if (!props.invoice.transactionCode) {
+      console.log("mutate");
+      mutate({ invoiceId: props.invoice.id, data: { paymentMethod: props.invoice.paymentMethod } });
+    }
+  }, []);
 
   return (
     <div className="space-y-4">

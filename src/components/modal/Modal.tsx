@@ -13,8 +13,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl max-w-full overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
-        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+      <div
+        className="bg-white rounded-2xl max-w-full shadow-2xl animate-in zoom-in-95 duration-200"
+        style={{
+          maxHeight: "calc(100vh - 50px)",
+          height: "100%",
+          overflow: "auto",
+        }}
+      >
+        <div className="p-6 border-b border-slate-100 flex justify-between items-center sticky top-[10px] backdrop-blur">
           <h3 className="text-xl font-bold text-slate-800">{title}</h3>
           <button
             onClick={onClose}

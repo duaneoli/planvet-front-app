@@ -2,7 +2,7 @@ import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDT
 import { UsePaymentService } from "@/api/planvet/use/UsePayment";
 import Button from "@/components/Button";
 import { Check, Copy } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import Barcode from "react-barcode";
 import { toast } from "sonner";
 
@@ -20,7 +20,16 @@ export function PaymentByBoleto(props: PaymentByBoletoProps) {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-  const { data, isLoading } = UsePaymentService.user.getCharge(props.invoice.id);
+  const { data } = UsePaymentService.user.getCharge(props.invoice.id);
+  const { mutate, isPending } = UsePaymentService.user.createCharge();
+
+  useEffect(() => {
+    if (!props.invoice) return;
+    if (!props.invoice.transactionCode) {
+      console.log("mutate");
+      mutate({ invoiceId: props.invoice.id, data: { paymentMethod: props.invoice.paymentMethod } });
+    }
+  }, []);
 
   return (
     <div className="space-y-4">
