@@ -25,8 +25,7 @@ export function PaymentByPix(props: PaymentByPixProps) {
 
   useEffect(() => {
     if (!props.invoice) return;
-    if (!props.invoice.transactionCode) {
-      console.log("mutate");
+    if (!props.invoice.asaasPaymentId) {
       mutate({ invoiceId: props.invoice.id, data: { paymentMethod: props.invoice.paymentMethod } });
     }
   }, []);

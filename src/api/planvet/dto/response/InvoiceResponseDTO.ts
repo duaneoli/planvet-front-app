@@ -9,6 +9,7 @@ export type InvoiceResponseDTO = {
   installmentNumber: number;
   paymentMethod: PaymentMethodType;
   transactionCode: string;
+  asaasPaymentId?: string;
   barcode: string;
   paymentLink: string;
   processingDate: string;

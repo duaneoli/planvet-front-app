@@ -25,13 +25,13 @@ export function PaymentByBoleto(props: PaymentByBoletoProps) {
   };
 
   const { data } = UsePaymentService.user.getCharge(
-    invoice.transactionCode ? invoice.id : (undefined as unknown as number)
+    invoice.asaasPaymentId ? invoice.id : (undefined as unknown as number)
   );
   const { mutate, isPending, isSuccess, data: response } = UsePaymentService.user.createCharge();
 
   useEffect(() => {
     if (!invoice) return;
-    if (!invoice.transactionCode) {
+    if (!invoice.asaasPaymentId) {
       console.log("mutate");
       mutate({ invoiceId: invoice.id, data: { paymentMethod: invoice.paymentMethod } });
     }
