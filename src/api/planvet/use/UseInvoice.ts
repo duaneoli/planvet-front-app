@@ -7,8 +7,9 @@ class UseByUser {
     return useQuery({
       queryKey: ["invoices", query.toString()],
       queryFn: () => InvoiceService.user.getAll(query),
-      staleTime: 1000 * 60 * 5,
+      staleTime: 1000 * 60 * 2,
       placeholderData: (previus) => previus,
+      refetchOnWindowFocus: true,
     });
   }
 }

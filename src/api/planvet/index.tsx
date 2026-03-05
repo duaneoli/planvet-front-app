@@ -42,6 +42,7 @@ const PlanvetRouters = {
     me: {
       get: "/user/me",
       update: "/user/me",
+      card: "/user/me/card",
     },
     invoices: {
       list: "/user/invoices",
@@ -62,13 +63,14 @@ const PlanvetRouters = {
     login: "/auth/login",
     refresh: "/auth/refresh",
     me: "/auth/me",
+    php: "/auth/php",
   },
   payments: {
     invoice: {
       id: (invoiceId: number) => ({
         charge: {
-          create: `/payments/invoice/${invoiceId}/charge`,
-          get: `/payments/invoice/${invoiceId}/charge`,
+          create: `user/payments/invoice/${invoiceId}/charge`,
+          get: `user/payments/invoice/${invoiceId}/charge`,
         },
       }),
     },

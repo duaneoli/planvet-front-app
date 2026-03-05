@@ -13,7 +13,13 @@ class UseByUser {
         data,
       }: {
         invoiceId: number;
-        data: { paymentMethod: PaymentMethodType };
+        data: {
+          paymentMethod: PaymentMethodType;
+          cardNumber?: string;
+          cvv?: string;
+          expiration?: string;
+          holderName?: string;
+        };
       }) => PaymentService.user.createCharge(invoiceId, data),
       onSuccess: (data, variables) => {
         queryClient.setQueryData(["invoice", variables.invoiceId], data);

@@ -6,7 +6,7 @@ import { animalPhotoMapped } from "@/api/planvet/mapped";
 import Badge from "@/components/Badge";
 import Button from "@/components/Button";
 import PaymentModal from "@/components/modal/PaymentModal";
-import { Clock, Download, Eye } from "lucide-react";
+import { Clock } from "lucide-react";
 import { useState } from "react";
 
 export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
@@ -38,13 +38,13 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
         <div className="md:hidden">
           <Badge
             variant={
-              props.invoice.status === "pg"
+              props.invoice.status === "PAID"
                 ? "success"
-                : props.invoice.status === "ca"
+                : props.invoice.status === "CANCELLED"
                   ? "warning"
                   : "danger"
             }
-            pulse={props.invoice.status !== "pg"}
+            pulse={props.invoice.status !== "PAID"}
           >
             {InvoiceResponseMapped.status(props.invoice.status)}
           </Badge>
@@ -76,7 +76,7 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
           </p>
           <Badge
             variant={InvoiceResponseMapped.statusBadge(props.invoice.status)}
-            pulse={props.invoice.status !== "pg"}
+            pulse={props.invoice.status !== "PAID"}
           >
             {InvoiceResponseMapped.status(props.invoice.status)}
           </Badge>
@@ -96,7 +96,7 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
         </div>
 
         <div className="flex items-center gap-2">
-          {props.invoice.status !== "pg" ? (
+          {props.invoice.status !== "PAID" ? (
             <Button
               variant="primary"
               size="sm"
@@ -106,19 +106,20 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
               Pagar
             </Button>
           ) : (
-            <button
-              className="p-2.5 text-slate-400 hover:text-azul-600 hover:bg-azul-50 rounded-2xl transition-all"
-              title="Ver Comprovante"
-            >
-              <Download size={20} />
-            </button>
+            // <button
+            //   className="p-2.5 text-slate-400 hover:text-azul-600 hover:bg-azul-50 rounded-2xl transition-all"
+            //   title="Ver Comprovante"
+            // >
+            //   <Download size={20} />
+            // </button>
+            <></>
           )}
-          <button
+          {/* <button
             className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-2xl transition-all"
             title="Ver Detalhes"
           >
             <Eye size={20} />
-          </button>
+          </button> */}
         </div>
       </div>
       <PaymentModal

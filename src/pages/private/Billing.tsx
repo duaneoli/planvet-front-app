@@ -13,7 +13,7 @@ const Billing: React.FC = () => {
       pageSize: 10,
       page: 1,
       sortBy: { originalDate: "DESC" },
-      filters: { status: ["pg", "ca"] },
+      filters: { status: ["PAID", "CANCELLED"] },
     })
   );
 
@@ -21,7 +21,7 @@ const Billing: React.FC = () => {
     Query.paramsToQuery({
       pageSize: 5,
       sortBy: { originalDate: "ASC" },
-      filters: { status: ["ab"] },
+      filters: { status: ["OPEN"] },
     })
   );
 

@@ -21,23 +21,23 @@ export type InvoiceResponseDTO = {
   interest: string;
   amount: string;
   description: string;
-  status: "pg" | "ab" | "ca";
+  status: "PAID" | "OPEN" | "CANCELLED";
   settlementNote: string;
   timestamp: Date;
   contract?: ContractResponseDTO;
 };
 
 export const InvoiceResponseMapped = {
-  status: (status: "pg" | "ab" | "ca") => {
-    if (status === "pg") return "Pago";
-    if (status === "ab") return "Pendente";
-    if (status === "ca") return "Cancelado";
+  status: (status: InvoiceResponseDTO["status"]) => {
+    if (status === "PAID") return "Pago";
+    if (status === "OPEN") return "Pendente";
+    if (status === "CANCELLED") return "Cancelado";
     return "Error";
   },
-  statusBadge: (status: "pg" | "ab" | "ca") => {
-    if (status === "pg") return "success";
-    if (status === "ab") return "warning";
-    if (status === "ca") return "info";
+  statusBadge: (status: InvoiceResponseDTO["status"]) => {
+    if (status === "PAID") return "success";
+    if (status === "OPEN") return "warning";
+    if (status === "CANCELLED") return "info";
     return undefined;
   },
 };

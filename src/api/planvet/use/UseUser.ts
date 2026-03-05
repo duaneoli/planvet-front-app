@@ -9,6 +9,14 @@ class UseByUser {
       staleTime: Infinity,
     });
   }
+
+  static card() {
+    return useQuery({
+      queryKey: ["me", "card"],
+      queryFn: UserServices.card,
+      staleTime: Infinity,
+    });
+  }
 }
 
 export class UseUserService {

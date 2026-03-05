@@ -17,7 +17,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
         className="bg-white rounded-2xl max-w-full shadow-2xl animate-in zoom-in-95 duration-200"
         style={{
           maxHeight: "calc(100vh - 50px)",
-          height: "100%",
           overflow: "auto",
         }}
       >

@@ -1,8 +1,26 @@
 import { useAuth } from "@/context/AuthContext";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export function Auth() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { loginPHP, isLoading } = useAuth();
+  const token = new URLSearchParams(window.location.search).get("token");
+
+  const fetch = async () => {
+    if (token) {
+      try {
+        await loginPHP(token);
+        window.location.replace("/");
+      } catch (error) {
+        toast.error("Error ao realizar o login, token invalido.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetch();
+  }, [token]);
 
   if (isLoading) {
     return (

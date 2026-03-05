@@ -1,5 +1,6 @@
 import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDTO";
 import { UsePaymentService } from "@/api/planvet/use/UsePayment";
+import Button from "@/components/Button";
 import { Loader } from "@/components/Loader";
 import dayjs from "dayjs";
 import { Check, Copy } from "lucide-react";
@@ -7,6 +8,7 @@ import React, { useEffect } from "react";
 
 type PaymentByPixProps = {
   invoice: InvoiceResponseDTO;
+  change: (status: InvoiceResponseDTO["paymentMethod"] | "FINISHED") => void;
 };
 
 export function PaymentByPix(props: PaymentByPixProps) {
@@ -39,14 +41,14 @@ export function PaymentByPix(props: PaymentByPixProps) {
             <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
               <img
                 className="w-[300px] h-[300px]"
-                src={`data:png;base64,${data.pix.encodedImage}`}
+                src={`data:png;base64,${data.pix?.encodedImage}`}
               ></img>
             </div>
             <p className="text-xs text-emerald-700 font-medium text-center px-4 gap-4">
               Escaneie o QR Code acima no app do seu banco para pagar instantaneamente.
             </p>
             <p className="text-xs text-emerald-700 font-medium text-center px-4 gap-4">
-              Expira em: {dayjs(data?.pix.expirationDate).format("DD/MM/YYYY HH:mm:ss")}
+              Expira em: {dayjs(data?.pix?.expirationDate).format("DD/MM/YYYY HH:mm:ss")}
             </p>
           </div>
 
@@ -57,11 +59,11 @@ export function PaymentByPix(props: PaymentByPixProps) {
             <div className="relative">
               <input
                 readOnly
-                value={data.pix.payload}
+                value={data.pix?.payload}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-mono text-slate-500 pr-12 outline-none"
               />
               <button
-                onClick={() => handleCopy(data?.pix.payload)}
+                onClick={() => handleCopy(data?.pix?.payload || "")}
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
               >
                 {copied ? <Check size={18} /> : <Copy size={18} />}
@@ -70,11 +72,9 @@ export function PaymentByPix(props: PaymentByPixProps) {
           </div>
         </>
       )}
-      {/* <div className="space-y-2 flex flex-row w-full">
-        <Button onClick={() => {}} variant="primary" className="flex-1">
-          Confirmar Pagamento
-        </Button>
-      </div> */}
+      <div className="flex justify-end">
+        <Button onClick={() => props.change("FINISHED")}>Confirmar pagamento</Button>
+      </div>
     </div>
   );
 }

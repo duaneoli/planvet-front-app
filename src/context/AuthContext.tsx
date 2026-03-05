@@ -14,6 +14,7 @@ interface AuthContextType {
   updateUser: (data: Partial<UserProfile>) => void;
   setUser: (data: Partial<UserProfile>) => void;
   verifySession: () => Promise<void>;
+  loginPHP: (token: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -60,6 +61,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const loginPHP = async (token: string) => {
+    setIsLoading(true);
+    try {
+      const validatedUser = await AuthService.phpToken(token);
+      _setUser(validatedUser);
+      setIsValidated(true);
+      LocalStorage.set("LOGGED_IN", true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     _setUser(null);
     setIsValidated(false);
@@ -91,6 +104,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isValidated,
         isLoading,
         setUser,
+        loginPHP,
         login,
         logout,
         updateUser,
