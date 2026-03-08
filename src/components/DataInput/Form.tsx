@@ -1,8 +1,9 @@
 import Button from "@/components/Button";
 
-export function Form(props: {
+export type FormProps = {
   handleSubmit: (data: any) => void;
   children: React.ReactNode;
+  isLoading?: boolean;
   rigthButton?: {
     isLoading?: boolean;
     text: string;
@@ -18,7 +19,9 @@ export function Form(props: {
     disabled?: boolean;
     isLoading?: boolean;
   };
-}) {
+};
+
+export function Form(props: FormProps) {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     props.handleSubmit(e);
@@ -31,7 +34,7 @@ export function Form(props: {
           <Button
             type="button"
             variant="white"
-            isLoading={props.leftButton.isLoading}
+            isLoading={props.leftButton.isLoading || props.isLoading}
             onClick={props.leftButton.onClick}
             className="button flex-1 py-4 px-6 rounded-2xl border-2 border-slate-100 text-slate-500 font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
           >
@@ -43,10 +46,10 @@ export function Form(props: {
         {props.rigthButton && (
           <Button
             type="submit"
-            isLoading={props.rigthButton.isLoading}
+            isLoading={props.rigthButton.isLoading || props.isLoading}
             variant="primary"
             size="lg"
-            className="button flex-[2] font-bold transition-all flex items-center justify-center"
+            className="button flex-2 font-bold transition-all flex items-center justify-center"
           >
             {props.rigthButton.iconLeft}
             <span>{props.rigthButton.text}</span>

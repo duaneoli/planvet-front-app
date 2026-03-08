@@ -96,7 +96,7 @@ const Login: React.FC = () => {
               to="/signup"
               className="text-azul-600 font-bold hover:underline mt-1 inline-block"
             >
-              Criar conta gratuitamente
+              Contratar um plano
             </Link>
           </div>
         </div>

@@ -18,8 +18,9 @@ class PlanvetClient {
       async (error) => {
         if (error.response?.status === 401) {
           try {
-            await api.post("/auth/refresh"); // O back lê o refresh_token do cookie
-            return api(error.config); // Tenta a requisição original de novo
+            if (error.response.url === "/auth/refresh") throw Error();
+            await api.post("/auth/refresh");
+            return api(error.config);
           } catch (refreshError) {
             window.location.href = "/login";
           }

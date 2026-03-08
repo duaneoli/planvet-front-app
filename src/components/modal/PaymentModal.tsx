@@ -47,10 +47,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
             <PaymentByCard invoice={invoice} change={(status) => setPaymentMethod(status)} />
           )}
           {valid && paymentMethod === "PIX" && (
-            <PaymentByPix invoice={invoice} change={(status) => setPaymentMethod(status)} />
+            <PaymentByPix invoice={invoice} success={() => setPaymentMethod("FINISHED")} />
           )}
           {valid && paymentMethod === "BOLETO" && (
-            <PaymentByBoleto invoice={invoice} change={(status) => setPaymentMethod(status)} />
+            <PaymentByBoleto
+              invoice={invoice}
+              changeToPix={() => setPaymentMethod("PIX")}
+              success={() => setPaymentMethod("FINISHED")}
+            />
           )}
           {valid && paymentMethod === "FINISHED" && (
             <div className="flex flex-col items-center justify-center space-y-8 py-12 animate-in zoom-in duration-700 text-center">
@@ -59,7 +63,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
                   <Check strokeWidth={4} className="animate-in zoom-in duration-500 delay-200" />
                 </div>
                 <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-25 -z-10"></div>
-                <div className="absolute inset-[-10px] bg-emerald-100 rounded-full animate-pulse -z-20"></div>
+                <div className="absolute inset-2.5 bg-emerald-100 rounded-full animate-pulse -z-20"></div>
               </div>
               <div className="bg-emerald-50 px-6 py-3 rounded-2xl flex items-center gap-3 text-emerald-700 font-bold border border-emerald-100">
                 <Sparkles size={20} className="text-amber-500 animate-spin" />
@@ -67,7 +71,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
               </div>
               <div className="space-y-2">
                 <h2 className="text-4xl font-black text-slate-800 tracking-tighter">Obrigado!</h2>
-                <p className="text-slate-500 font-medium w-[500px]">
+                <p className="text-slate-500 font-medium w-125">
                   Isso pode demorar um pouco, mas fique tranquilo, pode continuar utilizando a
                   plataforma normalmente e logo atualizaremos o status da fatura.
                 </p>

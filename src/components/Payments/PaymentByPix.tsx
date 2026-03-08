@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 
 type PaymentByPixProps = {
   invoice: InvoiceResponseDTO;
-  change: (status: InvoiceResponseDTO["paymentMethod"] | "FINISHED") => void;
+  success: () => void;
 };
 
 export function PaymentByPix(props: PaymentByPixProps) {
@@ -38,10 +38,7 @@ export function PaymentByPix(props: PaymentByPixProps) {
         <>
           <div className="bg-emerald-50 p-6 rounded-2xl flex flex-col items-center justify-center border border-emerald-100">
             <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
-              <img
-                className="w-[300px] h-[300px]"
-                src={`data:png;base64,${data.pix?.encodedImage}`}
-              ></img>
+              <img className="w-75 h-75" src={`data:png;base64,${data.pix?.encodedImage}`}></img>
             </div>
             <p className="text-xs text-emerald-700 font-medium text-center px-4 gap-4">
               Escaneie o QR Code acima no app do seu banco para pagar instantaneamente.
@@ -63,7 +60,7 @@ export function PaymentByPix(props: PaymentByPixProps) {
               />
               <button
                 onClick={() => handleCopy(data?.pix?.payload || "")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
               >
                 {copied ? <Check size={18} /> : <Copy size={18} />}
               </button>
@@ -72,7 +69,7 @@ export function PaymentByPix(props: PaymentByPixProps) {
         </>
       )}
       <div className="flex justify-end">
-        <Button onClick={() => props.change("FINISHED")}>Confirmar pagamento</Button>
+        <Button onClick={props.success}>Confirmar pagamento</Button>
       </div>
     </div>
   );

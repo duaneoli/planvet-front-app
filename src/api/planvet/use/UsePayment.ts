@@ -40,10 +40,6 @@ class UseByUser {
   }
 }
 
-export class UseInvoiceService {
-  static user = UseByUser;
-}
-
 export class UsePaymentService {
   static user = UseByUser;
 }

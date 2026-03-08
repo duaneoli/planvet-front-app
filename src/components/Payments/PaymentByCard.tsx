@@ -18,7 +18,7 @@ dayjs.extend(customParseFormat);
 type PaymentByCardProps = {
   show?: boolean;
   invoice: InvoiceResponseDTO;
-  change: (status: InvoiceResponseDTO["paymentMethod"] | "FINISHED") => void;
+  change?: (status: InvoiceResponseDTO["paymentMethod"] | "FINISHED") => void;
 };
 
 const signUpSchema = z.object({
@@ -76,7 +76,7 @@ export function PaymentByCard(props: PaymentByCardProps) {
           expiration: allowEdit ? data.expiration : undefined,
         },
       });
-      props.change("FINISHED");
+      if (props.change) props.change("FINISHED");
     } catch (error) {}
   };
 
@@ -90,7 +90,7 @@ export function PaymentByCard(props: PaymentByCardProps) {
   }, [card]);
 
   return (
-    <div className="flex flex-col gap-5 max-w-[500px]">
+    <div className="flex flex-col gap-5 max-w-125">
       <div className="relative">
         <span className="absolute w-full flex flex-row justify-end z-10">
           <Button

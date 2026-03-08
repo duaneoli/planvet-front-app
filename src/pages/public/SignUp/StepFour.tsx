@@ -22,7 +22,7 @@ const StepFourFormType = z
     dueDate: z.enum(dueDateConstant).optional().nullable(),
   })
   .superRefine((data, ctx) => {
-    if (data.paymentMethod !== "Cartão" && !data.dueDate) {
+    if (data.paymentMethod !== "CREDIT_CARD" && !data.dueDate) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Selecione o dia de vencimento da fatura",
@@ -96,7 +96,7 @@ export function StepFour(props: {
         }}
       >
         <div className="space-y-6 animate-in slide-in-from-right-8 duration-500">
-          <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-[2rem] flex items-center justify-between shadow-sm">
+          <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-4x1 flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-4">
               <div className="bg-white p-3 rounded-2xl shadow-sm text-emerald-600">
                 <ShieldCheck size={28} />
@@ -136,13 +136,13 @@ export function StepFour(props: {
                   <label
                     key={method}
                     htmlFor={`${method}-radio`}
-                    className={`flex flex-col items-center justify-center p-5 rounded-[2rem] border-2 transition-all duration-300 ${
+                    className={`flex flex-col items-center justify-center p-5 rounded-4x1 border-2 transition-all duration-300 ${
                       formData.paymentMethod === method
                         ? "border-azul-600 bg-azul-50 text-azul-700 shadow-lg -translate-y-1"
                         : "border-slate-100 bg-white text-slate-400 hover:border-slate-200"
                     }`}
                   >
-                    {method === "Cartão" ? (
+                    {method === "CREDIT_CARD" ? (
                       <CreditCard size={28} />
                     ) : method === "PIX" ? (
                       <QrCode size={28} />
@@ -180,7 +180,7 @@ export function StepFour(props: {
                         <label
                           htmlFor={"dueDate-radio" + d}
                           key={d}
-                          className={`py-3 rounded-2xl text-xs font-bold border border-2 transition-all text-center ${
+                          className={`py-3 rounded-2xl text-xs font-bold border-2 transition-all text-center ${
                             formData.dueDate === d
                               ? "bg-azul-600 text-white border-azul-600 shadow-md scale-105"
                               : "bg-white text-slate-600 border-slate-200 hover:border-azul-300"
@@ -198,7 +198,7 @@ export function StepFour(props: {
               </div>
 
               {showDueDateWarning && (
-                <div className="p-5 bg-amber-50 border border-amber-200 rounded-[2rem] flex gap-4 animate-in slide-in-from-top-2 duration-300">
+                <div className="p-5 bg-amber-50 border border-amber-200 rounded-4x1 flex gap-4 animate-in slide-in-from-top-2 duration-300">
                   <div className="bg-amber-100 p-2 h-fit rounded-lg text-amber-600">
                     <AlertTriangle size={20} />
                   </div>
@@ -217,8 +217,8 @@ export function StepFour(props: {
             </div>
           )}
 
-          {formData.paymentMethod === "Cartão" && (
-            <div className="p-5 bg-blue-50 border border-blue-100 rounded-[2rem] flex items-start gap-4 animate-in fade-in slide-in-from-bottom-2">
+          {formData.paymentMethod === "CREDIT_CARD" && (
+            <div className="p-5 bg-blue-50 border border-blue-100 rounded-4x1 flex items-start gap-4 animate-in fade-in slide-in-from-bottom-2">
               <div className="bg-blue-100 p-2 rounded-lg text-blue-600">
                 <Info size={20} />
               </div>

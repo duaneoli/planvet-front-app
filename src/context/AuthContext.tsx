@@ -15,6 +15,7 @@ interface AuthContextType {
   setUser: (data: Partial<UserProfile>) => void;
   verifySession: () => Promise<void>;
   loginPHP: (token: string) => Promise<void>;
+  refreshSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,6 +42,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const validatedUser = await AuthService.me();
       _setUser(validatedUser);
       setIsValidated(true);
+    } catch (error) {
+      console.error("Sessão inválida no servidor:", error);
+      logout();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const refreshSession = async () => {
+    setIsLoading(true);
+    try {
+      const validatedUser = await AuthService.refresh();
+      _setUser(validatedUser);
+      setIsValidated(true);
+      LocalStorage.set("LOGGED_IN", true);
     } catch (error) {
       console.error("Sessão inválida no servidor:", error);
       logout();
@@ -105,6 +121,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isLoading,
         setUser,
         loginPHP,
+        refreshSession,
         login,
         logout,
         updateUser,

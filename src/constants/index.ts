@@ -1,4 +1,4 @@
-import { Contract, Invoice, Pet, PetSpecies, UserProfile } from "@/types";
+import { Contract, Invoice, Pet, PetSpecies } from "@/types";
 
 export const BREEDS_BY_SPECIES: Record<string, Array<{ id: number; breed: string }>> = {
   1: [
@@ -38,17 +38,7 @@ export const BREEDS_BY_SPECIES: Record<string, Array<{ id: number; breed: string
 };
 
 export const paymentMethodConstant = ["CREDIT_CARD", "BOLETO", "PIX"] as const;
-export const dueDateConstant = [1, 5, 10, 15, 20, 25] as const;
-
-export const MOCK_USER: UserProfile = {
-  name: "Ricardo Oliveira",
-  email: "ricardo.oliveira@email.com",
-  phone: "(11) 98765-4321",
-  address: "Rua das Flores, 123 - São Paulo, SP",
-  cpf: "123.456.789-00",
-  cardLastDigits: "4589",
-  cardBrand: "Visa",
-};
+export const dueDateConstant = ["1", "5", "10", "15", "20", "25"] as const;
 
 export const MOCK_PETS: Pet[] = [
   {

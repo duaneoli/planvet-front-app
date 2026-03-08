@@ -14,4 +14,25 @@ export class UserServices extends PlanvetApi {
     );
     return response.data;
   }
+
+  static async update(data: {
+    fullName?: string;
+    phone?: string;
+    cellPhone?: string;
+    gender?: string;
+    birthDate?: string;
+    street?: string;
+    streetNumber?: number;
+    streetComplement?: string;
+    neighborhood?: string;
+    cep?: string;
+    city?: string;
+    state?: string;
+  }) {
+    const response = await PlanvetApi.client.put<UserResponseDTO>(
+      PlanvetApi.router.users.me.update,
+      data
+    );
+    return response.data;
+  }
 }

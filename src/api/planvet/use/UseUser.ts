@@ -1,5 +1,6 @@
 import { UserServices } from "@/api/planvet/services/UserService";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 class UseByUser {
   static me() {
@@ -15,6 +16,20 @@ class UseByUser {
       queryKey: ["me", "card"],
       queryFn: UserServices.card,
       staleTime: Infinity,
+    });
+  }
+
+  static update() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: (data: Parameters<typeof UserServices.update>[0]) => UserServices.update(data),
+      onSuccess: (data) => {
+        queryClient.setQueryData(["me"], data);
+      },
+      onError: (error) => {
+        toast.error("Error ao atualizar informações do usuário");
+      },
     });
   }
 }

@@ -84,7 +84,7 @@ export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
       </div>
 
       {/* Value & Actions */}
-      <div className="flex items-center justify-between md:w-[250px] gap-6 pt-2 md:pt-0 w-full">
+      <div className="flex items-center justify-between md:w-62.5 gap-6 pt-2 md:pt-0 w-full">
         <div className="md:text-right">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
             Valor

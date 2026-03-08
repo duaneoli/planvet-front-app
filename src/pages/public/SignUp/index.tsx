@@ -1,22 +1,34 @@
 import { Card } from "@/components/Card";
+import { AddressForm } from "@/components/forms/AddressForm";
 import { Link } from "@/components/Link";
 import { Step } from "@/components/Step";
+import { useAuth } from "@/context/AuthContext";
 import { StepFive } from "@/pages/public/SignUp/StepFive";
 import { StepFour } from "@/pages/public/SignUp/StepFour";
 import { StepOne } from "@/pages/public/SignUp/StepOne";
 import { StepSeven } from "@/pages/public/SignUp/StepSeven";
-import { StepSix } from "@/pages/public/SignUp/StepSix";
 import { StepThree } from "@/pages/public/SignUp/StepThree";
 import { StepTwo } from "@/pages/public/SignUp/StepTwo";
 import { DueDateType, PaymentMethodType } from "@/types";
-import { Banknote, Check, Contact, Dog, FileText, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Banknote,
+  Check,
+  Contact,
+  Dog,
+  FileText,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(7);
-  const [isFinalizing, setIsFinalizing] = useState(true);
+  const [isFinalizing, setIsFinalizing] = useState(false);
+  const { refreshSession } = useAuth();
+
   const [info, setInfo] = useState<{
     email?: string;
     cpf?: string;
@@ -30,7 +42,6 @@ const SignUp: React.FC = () => {
     paymentMethod?: PaymentMethodType;
     dueDate?: DueDateType | undefined | null;
   }>({
-    email: "duane@duane.com",
     cpf: "376.709.628-52",
     fullName: "Duane Silva",
     password: "Senha@123",
@@ -38,7 +49,7 @@ const SignUp: React.FC = () => {
     petName: "Rex",
     petBirthDate: "2018-06-15",
     paymentMethod: "BOLETO",
-    dueDate: 1,
+    dueDate: "1",
     petBreed: "7",
     petSpecies: "1",
   });
@@ -58,7 +69,8 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     if (step < 8) return;
-    navigate("/dashboard");
+    refreshSession();
+    setTimeout(() => navigate("/"), 5000);
   }, [step]);
 
   return (
@@ -140,7 +152,17 @@ const SignUp: React.FC = () => {
           {step === 5 && (
             <StepFive data={info} onNext={() => setStep(6)} onPrevius={() => setStep(4)} />
           )}
-          {step === 6 && <StepSix onNext={() => setStep(7)} />}
+          {step === 6 && (
+            <AddressForm
+              onSuccess={() => setStep(7)}
+              form={{
+                rigthButton: {
+                  text: "Próximo Passo",
+                  iconRight: <ArrowRight size={20} />,
+                },
+              }}
+            />
+          )}
           {step === 7 && (
             <StepSeven
               onPrevious={() => setStep(6)}
@@ -159,13 +181,13 @@ const SignUp: React.FC = () => {
                   />
                 </div>
                 <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-25 -z-10"></div>
-                <div className="absolute inset-[-10px] bg-emerald-100 rounded-full animate-pulse -z-20"></div>
+                <div className="absolute inset-2.5 bg-emerald-100 rounded-full animate-pulse -z-20"></div>
               </div>
 
               <div className="space-y-2">
                 <h2 className="text-4xl font-black text-slate-800 tracking-tighter">PARABÉNS!</h2>
                 <p className="text-slate-500 font-medium">
-                  A proteção para <strong>{info.petName}</strong> foi ativada.
+                  A proteção para <strong>{info.petName}</strong> está sendo ativada.
                 </p>
               </div>
 

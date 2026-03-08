@@ -9,7 +9,8 @@ import { toast } from "sonner";
 
 type PaymentByBoletoProps = {
   invoice: InvoiceResponseDTO;
-  change: (change: InvoiceResponseDTO["paymentMethod"] | "FINISHED") => void;
+  changeToPix?: () => void;
+  success: () => void;
 };
 
 export function PaymentByBoleto(props: PaymentByBoletoProps) {
@@ -85,14 +86,16 @@ export function PaymentByBoleto(props: PaymentByBoletoProps) {
             </div>
           </div>
           <div className="space-y-2 flex flex-row w-full gap-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              icon={<Copy size={16} />}
-              onClick={() => props.change("PIX")}
-            >
-              Pagar com Pix
-            </Button>
+            {props.changeToPix && (
+              <Button
+                variant="outline"
+                className="flex-1"
+                icon={<Copy size={16} />}
+                onClick={props.changeToPix}
+              >
+                Pagar com Pix
+              </Button>
+            )}
             <a
               className="flex-1"
               href={data.bankSlip?.bankSlipUrl || ""}
@@ -104,8 +107,10 @@ export function PaymentByBoleto(props: PaymentByBoletoProps) {
               </Button>
             </a>
           </div>
-          <div className="flex justify-end">
-            <Button onClick={() => props.change("FINISHED")}>Confirmar pagamento</Button>
+          <div className="flex flex-1 w-full">
+            <Button className="w-full" onClick={props.success}>
+              Confirmar pagamento
+            </Button>
           </div>
         </>
       )}

@@ -2,8 +2,10 @@ import { RegisterService } from "@/api/planvet/services/RegisterService";
 import { UseRegisterService } from "@/api/planvet/use/Register";
 import Button from "@/components/Button";
 import { delay, delayWithRace } from "@/hooks/functions";
+import { AxiosError } from "axios";
 import { CheckCircle2, ChevronLeft, CircleX, Dog, FileText, Loader2, User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export function StepFive(props: { data: any; onNext: () => void; onPrevius: () => void }) {
@@ -21,6 +23,7 @@ export function StepFive(props: { data: any; onNext: () => void; onPrevius: () =
     { id: "contract", label: "Gerando contrato e apólice", icon: <FileText size={20} /> },
   ];
 
+  const navigate = useNavigate();
   const { mutateAsync } = UseRegisterService.useCreate();
 
   const handleFinalSubmit = async (formData: Parameters<typeof RegisterService.created>[0]) => {
@@ -43,9 +46,19 @@ export function StepFive(props: { data: any; onNext: () => void; onPrevius: () =
       await delay(1000);
       props.onNext();
     } catch (error) {
+      const _error = error as AxiosError;
       // Trata erro em qualquer etapa
       setStatus({ user: "error", pet: "error", contract: "error" });
-      toast.error("Error ao criar o contrato", { id: "main-action-toast", closeButton: true });
+      if (_error.status === 409) {
+        toast.error("Error ao criar o contrato: Usuário já existe", {
+          id: "main-action-toast",
+          description: "Por favor, realize o login",
+        });
+        navigate("/login");
+      } else
+        toast.error("Error ao criar o contrato: Tente novamente ou entre em contato conosco.", {
+          id: "main-action-toast",
+        });
     }
   };
 

@@ -15,6 +15,11 @@ export class AuthService extends PlanvetApi {
     return response.data;
   }
 
+  static async refresh() {
+    const response = await PlanvetApi.client.post<LoginResponseDTO>(PlanvetApi.router.auth.refresh);
+    return response.data;
+  }
+
   static async phpToken(token: string) {
     const response = await PlanvetApi.client.post<LoginResponseDTO>(
       PlanvetApi.router.auth.php,
