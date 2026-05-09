@@ -1,11 +1,11 @@
-import { SpeciesServices } from "@/api/planvet/services/SpeciesService";
+import { AnimalService } from "@/api/planvet/services/animal/AnimalService";
 import { useQuery } from "@tanstack/react-query";
 
 export class UseSpeciesService {
   static useGetAll() {
     return useQuery({
       queryKey: ["species"],
-      queryFn: SpeciesServices.getAll,
+      queryFn: AnimalService.getSpecies,
       staleTime: Infinity,
     });
   }

@@ -13,7 +13,7 @@ const PetSocial: React.FC = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
-      content: "Acabei de ganhar um petisco novo da PetLife! Miau!",
+      content: "Acabei de ganhar um petisco novo da PlanVet! Miau!",
       likes: 12,
       date: "Hoje",
     },

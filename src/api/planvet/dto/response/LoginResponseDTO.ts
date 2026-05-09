@@ -1,3 +1,5 @@
+import { UserResponseDTO } from "@/api/planvet/dto/response/UserResponseDTO";
+
 export type LoginResponseDTO = {
   id: number;
   userLogin: string;
@@ -8,5 +10,5 @@ export type LoginResponseDTO = {
   userActivationKey: string;
   userStatus: number;
   displayName: string;
-  //   user?: UserResponseDTO;
+  user?: UserResponseDTO;
 };

@@ -1,77 +1,95 @@
+import { AuthService } from "@/api/planvet/services/AuthService";
 import { Card } from "@/components/Card";
-import { AddressForm } from "@/components/forms/AddressForm";
+import { Form } from "@/components/DataInput/Form";
+import { Input } from "@/components/DataInput/Input";
 import { Link } from "@/components/Link";
-import { Step } from "@/components/Step";
 import { useAuth } from "@/context/AuthContext";
-import { StepFive } from "@/pages/public/SignUp/StepFive";
-import { StepFour } from "@/pages/public/SignUp/StepFour";
-import { StepOne } from "@/pages/public/SignUp/StepOne";
-import { StepSeven } from "@/pages/public/SignUp/StepSeven";
-import { StepThree } from "@/pages/public/SignUp/StepThree";
-import { StepTwo } from "@/pages/public/SignUp/StepTwo";
-import { DueDateType, PaymentMethodType } from "@/types";
+import { maskCPF } from "@/hooks/mask";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cpf } from "cpf-cnpj-validator";
+import { AxiosError } from "axios";
 import {
   ArrowRight,
-  Banknote,
   Check,
-  Contact,
   Dog,
-  FileText,
-  ShieldCheck,
+  Fingerprint,
+  Lock,
+  Mail,
   Sparkles,
+  User,
+  X,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import z from "zod";
+
+const signUpSchema = z
+  .object({
+    fullName: z.string().min(3, "Nome muito curto"),
+    email: z.string().email("E-mail inválido"),
+    cpf: z.string().refine((c) => cpf.isValid(c), { message: "CPF inválido" }),
+    password: z
+      .string()
+      .min(8, "Mínimo de 8 caracteres")
+      .regex(/[A-Z]/, "Deve conter uma letra maiúscula")
+      .regex(/[a-z]/, "Deve conter uma letra minúscula")
+      .regex(/[0-9]/, "Deve conter um número")
+      .regex(/[^A-Za-z0-9]/, "Deve conter um símbolo (!@#$%^&*)"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
+
+type SignUpFormType = z.infer<typeof signUpSchema>;
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(7);
-  const [isFinalizing, setIsFinalizing] = useState(false);
   const { refreshSession } = useAuth();
+  const [done, setDone] = useState(false);
 
-  const [info, setInfo] = useState<{
-    email?: string;
-    cpf?: string;
-    fullName?: string;
-    password?: string;
-    confirmPassword?: string;
-    petName?: string;
-    petBirthDate?: string;
-    petSpecies?: any;
-    petBreed?: string;
-    paymentMethod?: PaymentMethodType;
-    dueDate?: DueDateType | undefined | null;
-  }>({
-    cpf: "376.709.628-52",
-    fullName: "Duane Silva",
-    password: "Senha@123",
-    confirmPassword: "Senha@123",
-    petName: "Rex",
-    petBirthDate: "2018-06-15",
-    paymentMethod: "BOLETO",
-    dueDate: "1",
-    petBreed: "7",
-    petSpecies: "1",
+  const {
+    register,
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignUpFormType>({
+    resolver: zodResolver(signUpSchema),
+    mode: "onChange",
+    defaultValues: { cpf: "" },
   });
 
-  const onSubmit = async (data: typeof info) => {
-    setIsFinalizing(true);
-    setStep(5);
-  };
+  const password = watch("password", "");
+  const formCpf = watch("cpf");
 
-  const nextStep = () => {
-    setStep(step + 1);
-  };
+  const passwordRequirements = [
+    { label: "8+ caracteres", met: password.length >= 8 },
+    { label: "Letra Maiúscula", met: /[A-Z]/.test(password) },
+    { label: "Letra Minúscula", met: /[a-z]/.test(password) },
+    { label: "Número", met: /[0-9]/.test(password) },
+    { label: "Símbolo (!@#$)", met: /[^A-Za-z0-9]/.test(password) },
+  ];
 
-  const previousStep = () => {
-    setStep(step - 1);
+  const onSubmit = async (data: SignUpFormType) => {
+    try {
+      await AuthService.register({
+        fullName: data.fullName,
+        email: data.email,
+        cpf: data.cpf,
+        password: data.password,
+      });
+      await refreshSession();
+      setDone(true);
+      setTimeout(() => navigate("/animals?create=true"), 3000);
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      toast.error(axiosError.response?.data?.message ?? "Erro ao criar conta. Tente novamente.");
+    }
   };
-
-  useEffect(() => {
-    if (step < 8) return;
-    refreshSession();
-    setTimeout(() => navigate("/"), 5000);
-  }, [step]);
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-12">
@@ -85,137 +103,114 @@ const SignUp: React.FC = () => {
           </div>
         </div>
 
-        {!isFinalizing ? (
-          <Step
-            steps={[
-              { icon: <Dog size={20} />, label: "Tutor" },
-              { icon: <ShieldCheck size={20} />, label: "Senha" },
-              { icon: <Check size={20} />, label: "Pet" },
-              { icon: <Check size={20} />, label: "Plano" },
-            ]}
-            currentStep={step}
-          />
-        ) : (
-          <Step
-            steps={[
-              { icon: <FileText size={20} />, label: "Contrato" },
-              { icon: <Contact size={20} />, label: "Endereço" },
-              { icon: <Banknote size={20} />, label: "Pagamento" },
-            ]}
-            currentStep={step - 4}
-          />
-        )}
-
         <Card>
-          {step === 1 && (
-            <StepOne
-              defaultValues={info}
-              onNext={(data) => {
-                setInfo({ ...info, ...data });
-                nextStep();
+          {!done ? (
+            <Form
+              handleSubmit={handleSubmit(onSubmit)}
+              rigthButton={{
+                isLoading: isSubmitting,
+                text: "Criar conta",
+                iconRight: <ArrowRight size={20} />,
               }}
-            />
-          )}
-          {step == 2 && (
-            <StepTwo
-              defaultValues={info}
-              onNext={(data) => {
-                setInfo({ ...info, ...data });
-                setStep(3);
-              }}
-              onPrevious={previousStep}
-            />
-          )}
-          {step === 3 && (
-            <StepThree
-              defaultValues={info}
-              onNext={(data) => {
-                setInfo({ ...info, ...data });
-                setStep(4);
-              }}
-              onPrevious={() => setStep(2)}
-            />
-          )}
-          {step === 4 && (
-            <StepFour
-              defaultValues={info as typeof info & { petName: string }}
-              onNext={(data) => {
-                setInfo({ ...info, ...data });
-                onSubmit({ ...info, ...data });
-              }}
-              onPrevious={(data) => {
-                setInfo({ ...info, ...data });
-                setStep(3);
-              }}
-            />
-          )}
-          {step === 5 && (
-            <StepFive data={info} onNext={() => setStep(6)} onPrevius={() => setStep(4)} />
-          )}
-          {step === 6 && (
-            <AddressForm
-              onSuccess={() => setStep(7)}
-              form={{
-                rigthButton: {
-                  text: "Próximo Passo",
-                  iconRight: <ArrowRight size={20} />,
-                },
-              }}
-            />
-          )}
-          {step === 7 && (
-            <StepSeven
-              onPrevious={() => setStep(6)}
-              onNext={() => setStep(8)}
-              paymentMethod={info.paymentMethod}
-            />
-          )}
-          {step === 8 && (
+            >
+              <div className="text-center mb-4">
+                <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Crie sua conta</h1>
+                <p className="text-slate-500 text-sm">Insira seus dados para começar a proteção.</p>
+              </div>
+
+              <Input
+                label="Nome Completo"
+                icon={<User size={18} />}
+                placeholder="Nome e sobrenome"
+                error={errors.fullName?.message}
+                {...register("fullName")}
+              />
+
+              <Input
+                label="E-mail"
+                type="email"
+                icon={<Mail size={18} />}
+                placeholder="seu@email.com"
+                error={errors.email?.message}
+                {...register("email")}
+              />
+
+              <Input
+                label="CPF"
+                icon={<Fingerprint size={18} />}
+                placeholder="000.000.000-00"
+                error={errors.cpf?.message}
+                value={formCpf}
+                {...register("cpf", {
+                  onChange: (e) => setValue("cpf", maskCPF(e.target.value)),
+                })}
+              />
+
+              <Input
+                label="Senha"
+                type="password"
+                placeholder="••••••••"
+                icon={<Lock size={18} />}
+                error={errors.password?.message}
+                {...register("password")}
+              />
+
+              {password.length > 0 && (
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 grid grid-cols-2 gap-y-2">
+                  {passwordRequirements.map((req, i) => (
+                    <div
+                      key={i}
+                      className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-tight ${req.met ? "text-emerald-600" : "text-slate-400"}`}
+                    >
+                      {req.met ? <Check size={12} strokeWidth={4} /> : <X size={12} strokeWidth={4} />}
+                      {req.label}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <Input
+                label="Confirmar Senha"
+                type="password"
+                placeholder="••••••••"
+                icon={<Lock size={18} />}
+                error={errors.confirmPassword?.message}
+                {...register("confirmPassword")}
+              />
+            </Form>
+          ) : (
             <div className="flex flex-col items-center justify-center space-y-8 py-12 animate-in zoom-in duration-700 text-center">
               <div className="relative">
                 <div className="w-28 h-28 bg-emerald-600 rounded-full flex items-center justify-center text-white shadow-2xl shadow-emerald-200 z-10 relative">
-                  <Check
-                    size={64}
-                    strokeWidth={4}
-                    className="animate-in zoom-in duration-500 delay-200"
-                  />
+                  <Check size={64} strokeWidth={4} className="animate-in zoom-in duration-500 delay-200" />
                 </div>
                 <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-25 -z-10"></div>
                 <div className="absolute inset-2.5 bg-emerald-100 rounded-full animate-pulse -z-20"></div>
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-4xl font-black text-slate-800 tracking-tighter">PARABÉNS!</h2>
-                <p className="text-slate-500 font-medium">
-                  A proteção para <strong>{info.petName}</strong> está sendo ativada.
-                </p>
+                <h2 className="text-4xl font-black text-slate-800 tracking-tighter">BEM-VINDO!</h2>
+                <p className="text-slate-500 font-medium">Sua conta foi criada com sucesso.</p>
               </div>
 
               <div className="bg-emerald-50 px-6 py-3 rounded-2xl flex items-center gap-3 text-emerald-700 font-bold border border-emerald-100">
                 <Sparkles size={20} className="text-amber-500 animate-spin" />
-                <span>Redirecionando para sua conta...</span>
+                <span>Redirecionando para seus animais...</span>
               </div>
             </div>
           )}
         </Card>
 
-        {!isFinalizing && (
-          <div className="mt-8 text-center space-y-6">
+        {!done && (
+          <div className="mt-8 text-center">
             <div className="pt-6 border-slate-200">
               <p className="text-sm text-slate-600 font-medium">
-                Já possui o plano? <Link to="/login">ENTRAR AGORA</Link>
+                Já possui uma conta? <Link to="/login">ENTRAR AGORA</Link>
               </p>
             </div>
           </div>
         )}
       </div>
-
-      <style>{`
-        @keyframes progress {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
     </div>
   );
 };

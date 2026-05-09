@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, CreditCard } from "lucide-react";
+import { ChevronLeft, ChevronRight, ClipboardList, CreditCard, Dog } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -80,27 +80,27 @@ const Sidebar: React.FC<SidebarProps> = ({
               collapsed={isCollapsed}
               onClick={onCloseMobile}
             /> */}
-            {/* <SidebarItem
-              to="/pets"
+            <SidebarItem
+              to="/animals"
               icon={<Dog size={20} />}
               label="Meus Pets"
-              active={location.pathname.startsWith("/pets")}
+              active={location.pathname.startsWith("/animals")}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
-            /> */}
-            {/* <SidebarItem
+            />
+            <SidebarItem
               to="/contracts"
               icon={<ClipboardList size={20} />}
               label="Contratos"
-              active={location.pathname === "/contracts"}
+              active={location.pathname.startsWith("/contracts")}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
-            /> */}
+            />
             <SidebarItem
               to="/invoices"
               icon={<CreditCard size={20} />}
               label="Financeiro"
-              active={location.pathname === "/invoices"}
+              active={location.pathname.startsWith("/invoices")}
               collapsed={isCollapsed}
               onClick={onCloseMobile}
             />

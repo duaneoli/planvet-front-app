@@ -34,9 +34,6 @@ class PlanvetClient {
 }
 
 const PlanvetRouters = {
-  register: {
-    sign_up: "/register/sign-up",
-  },
   users: {
     created: "/users",
     update: (id: number) => `/users/${id}`,
@@ -50,7 +47,12 @@ const PlanvetRouters = {
     },
     contracts: {
       getAll: "/user/contracts",
+      get: (id: number) => `/user/contracts/${id}`,
     },
+    animals: {
+      list: "/user/animals",
+      get: (id: number) => `/user/animals/${id}`,
+    }
   },
   animals: {
     species: {
@@ -61,10 +63,13 @@ const PlanvetRouters = {
     },
   },
   auth: {
+    register: "/auth/register",
     login: "/auth/login",
     refresh: "/auth/refresh",
     me: "/auth/me",
     php: "/auth/php",
+    forgotPassword: "/auth/forgot-password",
+    resetPassword: "/auth/reset-password",
   },
   payments: {
     invoice: {

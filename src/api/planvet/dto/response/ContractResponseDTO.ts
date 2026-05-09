@@ -13,7 +13,7 @@ export type ContractStatusType =
   | "CANCELLED_NO_COST"
   | "IN_NEGOTIATION";
 
-export type PaymentMethodType = "BOLETO" | "CARD" | "PIX";
+export type PaymentMethodType = "BOLETO" | "CREDIT_CARD" | "PIX";
 
 export type ContractResponseDTO = {
   id: number;

@@ -1,5 +1,5 @@
 import { getInitials, getNameAndSubname } from "@/hooks/functions";
-import { LogOut, Menu, Settings, User } from "lucide-react";
+import { LogOut, Menu, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -78,14 +78,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
             >
               <User size={16} />
               <span>Meu Perfil</span>
-            </Link>
-            <Link
-              to="/billing"
-              onClick={() => setIsMenuOpen(false)}
-              className="flex items-center space-x-2 px-4 py-2 text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
-            >
-              <Settings size={16} />
-              <span>Configurações</span>
             </Link>
             <div className="border-t border-slate-50 mt-1 pt-1">
               <button

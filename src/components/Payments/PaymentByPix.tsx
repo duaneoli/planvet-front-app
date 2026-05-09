@@ -1,5 +1,5 @@
 import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDTO";
-import { UsePaymentService } from "@/api/planvet/use/UsePayment";
+import { UsePaymentService } from "@/hooks/planvet/UsePayment";
 import Button from "@/components/Button";
 import { Loader } from "@/components/Loader";
 import dayjs from "dayjs";

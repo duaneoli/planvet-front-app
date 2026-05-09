@@ -1,5 +1,5 @@
 import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDTO";
-import { UseUserService } from "@/api/planvet/use/UseUser";
+import { UseUserService } from "@/hooks/planvet/UseUser";
 import { Loader } from "@/components/Loader";
 import Modal from "@/components/modal/Modal";
 import { PaymentByBoleto } from "@/components/Payments/PaymentByBoleto";

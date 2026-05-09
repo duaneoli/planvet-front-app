@@ -1,5 +1,5 @@
 import { UserInvoiceGetAllRequest } from "@/api/planvet/dto/request/UserInvoiceGetAllRequest";
-import { UseInvoiceService } from "@/api/planvet/use/UseInvoice";
+import { UseInvoiceService } from "@/hooks/planvet/UseInvoice";
 import { InvoiceCard } from "@/components/Card/InvoiceCard";
 import Pagination from "@/components/Pagination";
 import { Main } from "@/components/template/main";

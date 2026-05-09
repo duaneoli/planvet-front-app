@@ -1,7 +1,16 @@
 import { PlanvetApi } from "@/api/planvet";
+import { RegisterRequestDTO } from "@/api/planvet/dto/request/RegisterRequestDTO";
 import { LoginResponseDTO } from "@/api/planvet/dto/response/LoginResponseDTO";
 
 export class AuthService extends PlanvetApi {
+  static async register(data: RegisterRequestDTO): Promise<LoginResponseDTO> {
+    const response = await PlanvetApi.client.post<LoginResponseDTO>(
+      PlanvetApi.router.auth.register,
+      data
+    );
+    return response.data;
+  }
+
   static async login(email: string, password: string) {
     const response = await PlanvetApi.client.post<LoginResponseDTO>(PlanvetApi.router.auth.login, {
       email,

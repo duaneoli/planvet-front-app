@@ -1,12 +1,12 @@
 import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDTO";
-import { UseInvoiceService } from "@/api/planvet/use/UseInvoice";
+import { UseInvoiceService } from "@/hooks/planvet/UseInvoice";
 import { PaymentByBoleto } from "@/components/Payments/PaymentByBoleto";
 import { PaymentByCard } from "@/components/Payments/PaymentByCard";
 import { PaymentByPix } from "@/components/Payments/PaymentByPix";
 import { Query } from "@/lib/Query";
 import { PaymentMethodType } from "@/types";
 import React, { useEffect, useState } from "react";
-import "react-credit-cards-2/dist/es/styles-compiled.css";
+
 
 export function StepSeven(props: {
   onPrevious: () => void;

@@ -1,5 +1,5 @@
 import { UseBrasilApiService } from "@/api/brasil-api/use/UseBrasilApi";
-import { UseUserService } from "@/api/planvet/use/UseUser";
+import { UseUserService } from "@/hooks/planvet/UseUser";
 import { Form, FormProps } from "@/components/DataInput/Form";
 import { Input } from "@/components/DataInput/Input";
 import { Select } from "@/components/DataInput/Select";

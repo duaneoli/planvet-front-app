@@ -1,5 +1,5 @@
 import { RegisterService } from "@/api/planvet/services/RegisterService";
-import { UseRegisterService } from "@/api/planvet/use/Register";
+import { UseRegisterService } from "@/hooks/planvet/Register";
 import Button from "@/components/Button";
 import { delay, delayWithRace } from "@/hooks/functions";
 import { AxiosError } from "axios";

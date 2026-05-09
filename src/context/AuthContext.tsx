@@ -20,7 +20,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const STORAGE_KEY = "@PetLife:user";
+const STORAGE_KEY = "@PlanVet:user";
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Inicialização síncrona: o app sabe na hora se existe um rastro de usuário

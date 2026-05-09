@@ -1,5 +1,5 @@
 import { InvoiceResponseDTO } from "@/api/planvet/dto/response/InvoiceResponseDTO";
-import { UsePaymentService } from "@/api/planvet/use/UsePayment";
+import { UsePaymentService } from "@/hooks/planvet/UsePayment";
 import Button from "@/components/Button";
 import { useQueryClient } from "@tanstack/react-query";
 import { Check, Copy } from "lucide-react";

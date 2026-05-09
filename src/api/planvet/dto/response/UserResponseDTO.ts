@@ -2,8 +2,8 @@ import { CityResponseDTO } from "@/api/planvet/dto/response/CityResponseDTO";
 import { StateResponseDTO } from "@/api/planvet/dto/response/StateResponseDTO";
 
 export enum AccessLevelEnum {
-  "ADMIN" = "ADMIN",
-  "CLI" = "CLI",
+  CLIENTE = "CLI",
+  ADMIN = "ADM",
 }
 export type UserResponseDTO = {
   id: number;

@@ -134,7 +134,7 @@ const Profile: React.FC = () => {
           conforme LGPD.
         </p>
         <button className="text-rose-600 font-bold text-sm hover:underline">
-          Desativar minha conta PetLife
+          Desativar minha conta PlanVet
         </button>
       </div>
     </div>
