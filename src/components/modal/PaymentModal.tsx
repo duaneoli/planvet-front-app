@@ -5,8 +5,9 @@ import Modal from "@/components/modal/Modal";
 import { PaymentByBoleto } from "@/components/Payments/PaymentByBoleto";
 import { PaymentByCard } from "@/components/Payments/PaymentByCard";
 import { PaymentByPix } from "@/components/Payments/PaymentByPix";
-import { Check, Sparkles } from "lucide-react";
+import { Check, MapPin, Sparkles } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
 
   const [valid, setValid] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const { data, isLoading } = UseUserService.user.me();
 
   useEffect(() => {
@@ -31,6 +34,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
   }, [data]);
 
   return (
+    <>
     <Modal isOpen={isOpen} onClose={onClose} title={`Pagamento - ${invoice.originalDate}`}>
       {isLoading ? (
         <Loader message="Carregando informações..." />
@@ -41,7 +45,32 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
             <p className="text-4xl font-black text-slate-800">R$ {invoice.amount}</p>
           </div>
           {!valid && (
-            <div>Precisamos das suas informações de endereço para prosseguir com o pagamento.</div>
+            <div className="flex flex-col items-center text-center gap-5 py-4">
+              <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center">
+                <MapPin size={28} className="text-amber-500" />
+              </div>
+              <div className="space-y-1.5">
+                <p className="font-bold text-slate-800 text-base">Endereço incompleto</p>
+                <p className="text-sm text-slate-500 max-w-xs">
+                  Precisamos do seu endereço para emitir a cobrança. Isso leva menos de um minuto.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  onClose();
+                  navigate("/profile", {
+                    state: {
+                      editAddress: true,
+                      returnTo: location.pathname,
+                      returnState: location.state,
+                    },
+                  });
+                }}
+                className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-colors shadow-lg shadow-emerald-100"
+              >
+                Completar endereço
+              </button>
+            </div>
           )}
           {valid && paymentMethod === "CREDIT_CARD" && (
             <PaymentByCard invoice={invoice} change={(status) => setPaymentMethod(status)} />
@@ -81,6 +110,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, invoice })
         </div>
       )}
     </Modal>
+    </>
   );
 };
 

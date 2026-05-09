@@ -4,6 +4,7 @@ import Animals from "@/pages/private/Animal";
 import AnimalDetail from "@/pages/private/AnimalDetail";
 import Billing from "@/pages/private/Billing";
 import ContractDetail from "@/pages/private/ContractDetail";
+import InvoiceDetail from "@/pages/private/InvoiceDetail";
 import Contracts from "@/pages/private/Contracts";
 import Profile from "@/pages/private/Profile";
 import React from "react";
@@ -16,6 +17,7 @@ export function PrivateRouter() {
         <Route index element={<Navigate to="/invoices" />} />
 
         <Route path="/invoices" element={<RouteGuard element={<Billing />} />} />
+        <Route path="/invoices/:id" element={<RouteGuard element={<InvoiceDetail />} />} />
         {/* <Route path="/pets" element={<Pets />} /> */}
         {/* <Route path="/pets/:id/social" element={<PetSocial />} /> */}
         <Route path="/contracts" element={<RouteGuard element={<Contracts />} />} />

@@ -47,6 +47,7 @@ export function AddressForm(props: {
   } = useForm<addressFormType>({
     resolver: zodResolver(addressSchema),
     mode: "onChange",
+    defaultValues: props.defaultValues,
   });
 
   const formData = watch();
@@ -100,11 +101,6 @@ export function AddressForm(props: {
   return (
     <Form {...props.form} handleSubmit={handleSubmit(submit)} isLoading={isSubmitting}>
       <div className="space-y-6 animate-in slide-in-from-right-8 duration-500">
-        <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Crie sua conta</h1>
-          <p className="text-slate-500 text-sm">Insira seus dados para começar a proteção.</p>
-        </div>
-
         <Input
           label="Cep"
           icon={<User size={18} />}

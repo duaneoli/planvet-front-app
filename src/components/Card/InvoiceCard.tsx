@@ -3,130 +3,54 @@ import {
   InvoiceResponseMapped,
 } from "@/api/planvet/dto/response/InvoiceResponseDTO";
 import { animalPhotoMapped } from "@/api/planvet/mapped";
-import Badge from "@/components/Badge";
-import Button from "@/components/Button";
-import PaymentModal from "@/components/modal/PaymentModal";
-import { Clock } from "lucide-react";
-import { useState } from "react";
+import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const statusStyle = {
+  PAID:      { dot: "bg-emerald-400", text: "text-emerald-600", amount: "text-slate-400 line-through" },
+  OPEN:      { dot: "bg-amber-400 animate-pulse", text: "text-amber-600", amount: "text-slate-800" },
+  CANCELLED: { dot: "bg-rose-400", text: "text-rose-500", amount: "text-slate-400 line-through" },
+};
 
 export function InvoiceCard(props: { invoice: InvoiceResponseDTO }) {
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const s = statusStyle[props.invoice.status] ?? statusStyle.OPEN;
 
   return (
-    <div
-      key={props.invoice.id}
-      className="bg-white rounded-3xl border border-slate-200 p-4 md:p-5 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center gap-4 md:gap-6 group"
+    <button
+      onClick={() => navigate(`/invoices/${props.invoice.id}`, { state: { invoice: props.invoice } })}
+      className="w-full bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 active:scale-[0.99] transition-all flex items-center gap-4 px-5 py-4 text-left group"
     >
-      {/* Pet Info & Status */}
-      <div className="flex items-center justify-between md:justify-start gap-4 md:w-1/4">
-        <div className="flex items-center gap-3">
-          <div className="relative shrink-0">
-            <img
-              src={animalPhotoMapped(props.invoice.contract?.animal?.photo || "")}
-              className="w-12 h-12 rounded-2xl object-cover ring-4 ring-slate-50"
-            />
-          </div>
-          <div className="overflow-hidden">
-            <p className="font-bold text-slate-800 text-base leading-tight truncate">
-              {props.invoice.contract?.animal?.name}
-            </p>
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">
-              {props.invoice.originalDate}
-            </p>
-          </div>
-        </div>
-        <div className="md:hidden">
-          <Badge
-            variant={
-              props.invoice.status === "PAID"
-                ? "success"
-                : props.invoice.status === "CANCELLED"
-                  ? "warning"
-                  : "danger"
-            }
-            pulse={props.invoice.status !== "PAID"}
-          >
-            {InvoiceResponseMapped.status(props.invoice.status)}
-          </Badge>
-        </div>
+      {/* Pet photo */}
+      <div className="relative shrink-0">
+        <img
+          src={animalPhotoMapped(props.invoice.contract?.animal?.photo || "")}
+          className="w-11 h-11 rounded-xl object-cover"
+        />
+        <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${s.dot}`} />
       </div>
 
-      {/* Details: Due Date & Method */}
-      <div className="flex-1 grid grid-cols-2 md:flex md:items-center gap-4 md:gap-12 py-4 md:py-0 border-y md:border-y-0 border-slate-50">
-        <div>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-            Vencimento
-          </p>
-          <div className="flex items-center gap-1.5 text-slate-600">
-            <Clock size={14} className="text-slate-300" />
-            <p className="text-xs font-semibold">{props.invoice.dueDate}</p>
-          </div>
-        </div>
-        <div>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-            Método
-          </p>
-          <Badge variant="neutral" className="text-[9px] lowercase font-medium border-slate-200">
-            {props.invoice.paymentMethod}
-          </Badge>
-        </div>
-        <div className="hidden md:block">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-            Status
-          </p>
-          <Badge
-            variant={InvoiceResponseMapped.statusBadge(props.invoice.status)}
-            pulse={props.invoice.status !== "PAID"}
-          >
-            {InvoiceResponseMapped.status(props.invoice.status)}
-          </Badge>
-        </div>
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <p className="font-bold text-slate-800 text-sm truncate leading-tight">
+          {props.invoice.contract?.animal?.name ?? "Animal"}
+        </p>
+        <p className="text-xs text-slate-400 font-medium mt-0.5">
+          {props.invoice.originalDate} · Venc. {props.invoice.dueDate}
+        </p>
       </div>
 
-      {/* Value & Actions */}
-      <div className="flex items-center justify-between md:w-62.5 gap-6 pt-2 md:pt-0 w-full">
-        <div className="md:text-right">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
-            Valor
-          </p>
-          <p className="font-black text-slate-800 text-xl">
-            <span className="text-xs font-bold text-slate-400 mr-1">R$</span>
-            {props.invoice.amount}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {props.invoice.status !== "PAID" ? (
-            <Button
-              variant="primary"
-              size="sm"
-              className="h-10 px-5 rounded-2xl text-xs font-bold shadow-lg shadow-azul-100"
-              onClick={() => setIsPaymentModalOpen(true)}
-            >
-              Pagar
-            </Button>
-          ) : (
-            // <button
-            //   className="p-2.5 text-slate-400 hover:text-azul-600 hover:bg-azul-50 rounded-2xl transition-all"
-            //   title="Ver Comprovante"
-            // >
-            //   <Download size={20} />
-            // </button>
-            <></>
-          )}
-          {/* <button
-            className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-2xl transition-all"
-            title="Ver Detalhes"
-          >
-            <Eye size={20} />
-          </button> */}
-        </div>
+      {/* Status + Amount */}
+      <div className="shrink-0 text-right">
+        <p className={`font-black text-base leading-tight ${s.amount}`}>
+          R$ {Number(props.invoice.amount).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+        </p>
+        <p className={`text-[10px] font-bold uppercase tracking-wide mt-0.5 ${s.text}`}>
+          {InvoiceResponseMapped.status(props.invoice.status)}
+        </p>
       </div>
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        invoice={props.invoice}
-      />
-    </div>
+
+      <ChevronRight size={16} className="text-slate-200 group-hover:text-slate-400 transition-colors shrink-0" />
+    </button>
   );
 }

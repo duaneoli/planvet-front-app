@@ -25,9 +25,11 @@ class UseByUser {
     return useMutation({
       mutationFn: (data: Parameters<typeof UserServices.update>[0]) => UserServices.update(data),
       onSuccess: (data) => {
-        queryClient.setQueryData(["me"], data);
+        queryClient.setQueryData(["me"], (prev: unknown) =>
+          prev ? { ...(prev as object), ...data } : data
+        );
       },
-      onError: (error) => {
+      onError: () => {
         toast.error("Error ao atualizar informações do usuário");
       },
     });

@@ -1,4 +1,5 @@
 import { UseUserService } from "@/hooks/planvet/UseUser";
+import AddressEditModal from "@/components/modal/AddressEditModal";
 import { Main } from "@/components/template/main";
 import { getInitials } from "@/hooks/functions";
 import dayjs from "dayjs";
@@ -12,9 +13,10 @@ import {
   Smartphone,
   User
 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function formatDate(value: string | Date | undefined) {
   if (!value) return "—";
@@ -69,8 +71,22 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
 // ─── main component ───────────────────────────────────────────────────────────
 
 const Profile: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { data: user, isLoading: isLoadingUser } = UseUserService.user.me();
   const { data: card, isLoading: isLoadingCard } = UseUserService.user.card();
+
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(
+    location.state?.editAddress === true
+  );
+
+  function handleAddressModalClose() {
+    setIsAddressModalOpen(false);
+    if (location.state?.returnTo) {
+      navigate(location.state.returnTo, { state: location.state.returnState });
+    }
+  }
 
   if (isLoadingUser || isLoadingCard) {
     return (
@@ -93,6 +109,12 @@ const Profile: React.FC = () => {
     user.gender === "M" ? "Masculino" : user.gender === "F" ? "Feminino" : "Não Informado";
 
   return (
+    <>
+    <AddressEditModal
+      isOpen={isAddressModalOpen}
+      onClose={handleAddressModalClose}
+      user={user}
+    />
     <Main title="Meu Perfil" description="Gerencie suas informações pessoais e de pagamento.">
       {/* ── hero ── */}
       <div className="relative bg-gradient-to-br from-emerald-600 to-teal-700 rounded-[2.5rem] p-10 mb-10 overflow-hidden shadow-lg border border-white/20">
@@ -102,7 +124,7 @@ const Profile: React.FC = () => {
         <div className="relative flex flex-col md:flex-row items-center gap-8">
           <div className="relative">
             <div className="w-28 h-28 rounded-[2rem] bg-white ring-4 ring-emerald-500/30 flex items-center justify-center text-emerald-600 text-3xl font-black shadow-2xl">
-              {getInitials(user.fullName)}
+              {getInitials(user.fullName ?? "")}
             </div>
             <div className="absolute -bottom-2 -right-2 bg-emerald-50 overflow-hidden rounded-xl p-1.5 shadow-lg border-2 border-white">
               <Shield size={16} className="text-emerald-500" />
@@ -145,7 +167,15 @@ const Profile: React.FC = () => {
 
           {/* address info */}
           <Card>
-            <SectionTitle icon={<MapPin size={18} />} label="Endereço Residencial" />
+            <div className="flex items-start justify-between">
+              <SectionTitle icon={<MapPin size={18} />} label="Endereço Residencial" />
+              <button
+                onClick={() => setIsAddressModalOpen(true)}
+                className="text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors shrink-0 mt-2"
+              >
+                Editar
+              </button>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
               <div className="sm:col-span-2">
                 <InfoRow
@@ -246,6 +276,7 @@ const Profile: React.FC = () => {
         </div>
       </div>
     </Main>
+    </>
   );
 };
 
